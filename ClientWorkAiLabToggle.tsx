@@ -304,14 +304,13 @@ export default function ClientWorkAiLabToggle(props: Props) {
         [leftLink, navigateTo, rightLink]
     )
 
-    // Rocker-switch tilt: the selected side rotates backward into the cavity,
-    // the other pops forward. Negative rotateY = left edge toward viewer,
-    // positive = right edge toward viewer.
+    // Rocker-switch tilt: the selected side presses DOWN into the cavity,
+    // the other side pops forward. Pressed side = active = dark text.
     const tiltAngle = 14
     const seesawTransform =
         selection === "left"
-            ? `rotateY(${tiltAngle}deg)`
-            : `rotateY(${-tiltAngle}deg)`
+            ? `rotateY(${-tiltAngle}deg)`
+            : `rotateY(${tiltAngle}deg)`
 
     const hitAreaStyle: React.CSSProperties = {
         width: "50%",
