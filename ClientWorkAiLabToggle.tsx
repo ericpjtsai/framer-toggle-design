@@ -4,6 +4,34 @@ import { addPropertyControls, ControlType } from "framer"
 type Selection = "left" | "right"
 type Theme = "light" | "dark"
 
+function toRgba(color: string, alpha: number): string {
+    let r = 31
+    let g = 58
+    let b = 211
+    const trimmed = color.trim()
+    if (trimmed.startsWith("#")) {
+        const hex = trimmed.slice(1)
+        if (hex.length === 3) {
+            r = parseInt(hex[0] + hex[0], 16)
+            g = parseInt(hex[1] + hex[1], 16)
+            b = parseInt(hex[2] + hex[2], 16)
+        } else if (hex.length >= 6) {
+            r = parseInt(hex.slice(0, 2), 16)
+            g = parseInt(hex.slice(2, 4), 16)
+            b = parseInt(hex.slice(4, 6), 16)
+        }
+    } else {
+        const match = trimmed.match(/rgba?\(([^)]+)\)/)
+        if (match) {
+            const parts = match[1].split(",").map((s) => parseFloat(s.trim()))
+            if (!Number.isNaN(parts[0])) r = parts[0]
+            if (!Number.isNaN(parts[1])) g = parts[1]
+            if (!Number.isNaN(parts[2])) b = parts[2]
+        }
+    }
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 interface Props {
     leftLabel: string
     rightLabel: string
@@ -15,9 +43,12 @@ interface Props {
     theme: Theme
     fontSize: number
     fontFamily: string
+    fontWeight: number
     activeTextColor: string
     inactiveTextColor: string
     shellTint: string
+    haloColor: string
+    padding: number
     depth: number
     lightIntensity: number
     cornerRadius: number
@@ -42,9 +73,12 @@ export default function ClientWorkAiLabToggle(props: Props) {
         theme,
         fontSize,
         fontFamily,
+        fontWeight,
         activeTextColor,
         inactiveTextColor,
         shellTint,
+        haloColor,
+        padding,
         depth,
         lightIntensity,
         cornerRadius,
@@ -63,10 +97,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
 
     const depthStrength = 0.72 + depth * 0.78
     const glowStrength = 0.48 + lightIntensity * 0.95
-    const shellPadding = 10
-    const pillInsetX = 10
-    const pillInsetTop = 10
-    const pillInsetBottom = 10
+    const shellPadding = padding
+    const pillInsetX = padding
+    const pillInsetTop = padding
+    const pillInsetBottom = padding
     const softRadius = Math.max(cornerRadius, 24)
     const cavityRadius = softRadius - shellPadding / 2
     const pillRadius = Math.max(cavityRadius - 8, 24)
@@ -102,8 +136,8 @@ export default function ClientWorkAiLabToggle(props: Props) {
                   ? `
                       0 -11px 28px 4px rgba(15,15,15,1),
                       -6px 13px 26px 0 rgba(42,42,44,1),
-                      0 0 70px 6px rgba(2,48,167,0.42),
-                      0 0 140px 18px rgba(2,48,167,0.18),
+                      0 0 70px 6px ${toRgba(haloColor, 0.42)},
+                      0 0 140px 18px ${toRgba(haloColor, 0.18)},
                       inset -1px 59px 21px 0 rgba(0,0,0,0.2),
                       inset 0 18px 7px 0 rgba(23,23,23,1)
                   `
@@ -114,6 +148,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
                       inset 0 18px 7px 0 rgba(23,23,23,1)
                   `,
               cavityBackground: `
+                  radial-gradient(circle at ${lightPosition.x * 100}% ${lightPosition.y * 100}%,
+                      rgba(255,255,255,${0.06 * glowStrength}) 0%,
+                      rgba(255,255,255,${0.02 * glowStrength}) 22%,
+                      rgba(255,255,255,0) 48%
+                  ),
                   linear-gradient(180deg,
                       rgba(20,22,24,1) 0%,
                       rgba(13,13,13,1) 100%
@@ -134,22 +173,23 @@ export default function ClientWorkAiLabToggle(props: Props) {
               `,
               cavityHoverGlow: accented
                   ? `
-                      radial-gradient(circle at 28% 50%,
-                          rgba(31,58,211,${isHovering ? 0.18 : 0.12}) 0%,
-                          rgba(31,58,211,0) 50%
+                      radial-gradient(circle at ${lightPosition.x * 100}% ${lightPosition.y * 100}%,
+                          ${toRgba(haloColor, isHovering ? 0.22 : 0.14)} 0%,
+                          ${toRgba(haloColor, 0)} 50%
                       )
                   `
                   : `
-                      radial-gradient(circle at ${cavityLightX - 4}% ${cavityLightY - 6}%,
-                          rgba(255,255,255,${isHovering ? 0.04 : 0.02}) 0%,
-                          rgba(255,255,255,0) 38%
+                      radial-gradient(circle at ${lightPosition.x * 100}% ${lightPosition.y * 100}%,
+                          rgba(255,255,255,${isHovering ? 0.06 : 0.03}) 0%,
+                          rgba(255,255,255,0) 40%
                       )
                   `,
               pillAura: "none",
               pillBackground: `
-                  radial-gradient(circle at 30% 18%,
-                      rgba(255,255,255,0.05) 0%,
-                      rgba(255,255,255,0) 40%
+                  radial-gradient(circle at ${lightPosition.x * 100}% ${lightPosition.y * 100}%,
+                      rgba(255,255,255,${0.18 + lightIntensity * 0.1}) 0%,
+                      rgba(255,255,255,${0.06 + lightIntensity * 0.04}) 26%,
+                      rgba(255,255,255,0) 56%
                   ),
                   linear-gradient(180deg,
                       rgba(34,36,38,1) 0%,
@@ -158,8 +198,8 @@ export default function ClientWorkAiLabToggle(props: Props) {
               `,
               pillShadow: accented
                   ? `
-                      inset 4px 0 0 0 rgba(31,58,211,0.92),
-                      inset 7px 0 12px 0 rgba(31,58,211,0.44),
+                      inset 4px 0 0 0 ${toRgba(haloColor, 0.92)},
+                      inset 7px 0 12px 0 ${toRgba(haloColor, 0.44)},
                       inset -2px 11px 9px 4px rgba(255,255,255,0.12),
                       inset -3px -9px 10px 0 rgba(0,0,0,0.75),
                       inset 0 -30px 26px 0 rgba(0,0,0,0.37),
@@ -193,7 +233,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                   ? "rgba(170,195,255,0.65)"
                   : "rgba(100,108,122,0.5)",
               activeTextShadow: accented
-                  ? "0 0 14px rgba(80,130,255,0.5), 0 0 2px rgba(255,255,255,0.7), 0 1px 0 rgba(0,0,0,0.6)"
+                  ? `0 0 14px ${toRgba(haloColor, 0.55)}, 0 0 2px rgba(255,255,255,0.7), 0 1px 0 rgba(0,0,0,0.6)`
                   : "0 1px 0 rgba(0,0,0,0.6)",
               inactiveTextShadow: "0 1px 0 rgba(0,0,0,0.6)",
           }
@@ -384,7 +424,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
         height: "100%",
         fontFamily,
         fontSize,
-        fontWeight: 600,
+        fontWeight,
         letterSpacing: "-0.06em",
         lineHeight: 1,
         whiteSpace: "nowrap",
@@ -429,10 +469,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             borderRadius: pillRadius,
                             transform: sliderTransform,
                             boxShadow: `
-                                0 0 0 2px rgba(31,58,211,0.75),
-                                0 0 24px 6px rgba(31,58,211,0.6),
-                                0 0 60px 16px rgba(21,82,243,0.4),
-                                0 0 120px 28px rgba(2,46,163,0.22)
+                                0 0 0 2px ${toRgba(haloColor, 0.75)},
+                                0 0 24px 6px ${toRgba(haloColor, 0.6)},
+                                0 0 60px 16px ${toRgba(haloColor, 0.4)},
+                                0 0 120px 28px ${toRgba(haloColor, 0.22)}
                             `,
                             opacity: accented ? 1 : 0,
                             pointerEvents: "none",
@@ -589,7 +629,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         color: palette.activeTextColor,
                         fontFamily,
                         fontSize,
-                        fontWeight: 600,
+                        fontWeight,
                         letterSpacing: "-0.06em",
                         lineHeight: 1,
                         whiteSpace: "nowrap",
@@ -643,9 +683,12 @@ ClientWorkAiLabToggle.defaultProps = {
     theme: "dark",
     fontSize: 30,
     fontFamily: "Inter, sans-serif",
+    fontWeight: 600,
     activeTextColor: "rgb(23, 25, 31)",
     inactiveTextColor: "rgba(168, 173, 182, 0.78)",
     shellTint: "rgba(239, 241, 245, 1)",
+    haloColor: "rgb(31, 58, 211)",
+    padding: 10,
     depth: 0.68,
     lightIntensity: 0.42,
     cornerRadius: 999,
@@ -704,6 +747,14 @@ addPropertyControls(ClientWorkAiLabToggle, {
         type: ControlType.String,
         title: "Font",
     },
+    fontWeight: {
+        type: ControlType.Number,
+        title: "Weight",
+        min: 100,
+        max: 900,
+        step: 100,
+        displayStepper: true,
+    },
     activeTextColor: {
         type: ControlType.Color,
         title: "Active",
@@ -715,6 +766,18 @@ addPropertyControls(ClientWorkAiLabToggle, {
     shellTint: {
         type: ControlType.Color,
         title: "Shell",
+    },
+    haloColor: {
+        type: ControlType.Color,
+        title: "Halo",
+    },
+    padding: {
+        type: ControlType.Number,
+        title: "Padding",
+        min: 0,
+        max: 40,
+        unit: "px",
+        displayStepper: true,
     },
     depth: {
         type: ControlType.Number,
