@@ -312,6 +312,14 @@ export default function ClientWorkAiLabToggle(props: Props) {
             ? `rotateY(${-tiltAngle}deg)`
             : `rotateY(${tiltAngle}deg)`
 
+    // Curved rim shadow on the pressed side. The plank has rounded ends, so an
+    // inset box-shadow follows the arc and reads as the button's edge sinking
+    // into the cavity on that side.
+    const pressedRimShadow =
+        selection === "left"
+            ? "inset 14px 0 16px -6px rgba(0,0,0,0.55)"
+            : "inset -14px 0 16px -6px rgba(0,0,0,0.55)"
+
     const hitAreaStyle: React.CSSProperties = {
         width: "50%",
         height: "100%",
@@ -429,12 +437,12 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             inset: 0,
                             borderRadius: pillRadius,
                             background: palette.pillBackground,
-                            boxShadow: palette.pillShadow,
+                            boxShadow: `${pressedRimShadow}, ${palette.pillShadow}`,
                             transformOrigin: "50% 50%",
                             transform: seesawTransform,
                             transformStyle: "preserve-3d",
                             transition:
-                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease",
+                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 520ms cubic-bezier(0.34, 1.35, 0.64, 1), background 220ms ease",
                         }}
                     >
                         <div
