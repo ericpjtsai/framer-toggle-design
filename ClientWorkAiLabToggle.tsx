@@ -418,6 +418,31 @@ export default function ClientWorkAiLabToggle(props: Props) {
                 transition: "transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
         >
+                {isDark && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: pillInsetTop + shellPadding,
+                            bottom: pillInsetBottom + shellPadding,
+                            left: pillInsetX + shellPadding,
+                            width: `calc(50% - ${10 + shellPadding}px)`,
+                            borderRadius: pillRadius,
+                            transform: sliderTransform,
+                            boxShadow: `
+                                0 0 0 2px rgba(31,58,211,0.75),
+                                0 0 24px 6px rgba(31,58,211,0.6),
+                                0 0 60px 16px rgba(21,82,243,0.4),
+                                0 0 120px 28px rgba(2,46,163,0.22)
+                            `,
+                            opacity: accented ? 1 : 0,
+                            pointerEvents: "none",
+                            zIndex: 6,
+                            transition:
+                                "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease",
+                        }}
+                    />
+                )}
+
                 <div
                     style={{
                         position: "absolute",
@@ -460,38 +485,6 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         transition: "background 220ms ease",
                     }}
                 />
-
-                {isDark && (
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: pillInsetTop,
-                            bottom: pillInsetBottom,
-                            left: pillInsetX,
-                            width: "calc(50% - 10px)",
-                            borderRadius: pillRadius,
-                            background: `
-                                linear-gradient(184deg,
-                                    rgba(0,0,0,0.3) 14%,
-                                    rgba(0,0,0,0) 88%
-                                ),
-                                linear-gradient(-90deg,
-                                    rgba(21,82,243,1) 10%,
-                                    rgba(2,46,163,1) 100%
-                                )
-                            `,
-                            boxShadow: `
-                                inset -13px -6px 7px 0 rgba(0,0,0,0.47),
-                                inset 0 4px 6px rgba(255,255,255,0.16),
-                                -8px -3px 27px 6px rgba(2,48,167,0.56)
-                            `,
-                            opacity: accented ? 1 : 0,
-                            pointerEvents: "none",
-                            zIndex: 1,
-                            transition: "opacity 460ms cubic-bezier(0.22, 1, 0.36, 1)",
-                        }}
-                    />
-                )}
 
                 {palette.pillAura !== "none" && (
                     <div
