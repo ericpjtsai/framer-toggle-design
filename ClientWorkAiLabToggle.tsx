@@ -310,18 +310,21 @@ export default function ClientWorkAiLabToggle(props: Props) {
         [leftLink, navigateTo, rightLink]
     )
 
-    // V-hinged rocker: the two halves pivot around the shared center line.
-    // The selected half stays flat at the cavity floor; the other half hinges
-    // up from that seam, so the silhouette reads as "__/" or "\__".
-    const tiltAngle = 16
-    const leftHalfTransform =
-        selection === "right"
-            ? `rotateZ(${tiltAngle}deg)`
-            : "rotateZ(0deg)"
-    const rightHalfTransform =
+    // Rocker-switch tilt: the selected side presses DOWN into the cavity,
+    // the other side pops forward. Pressed side = active = dark text.
+    const tiltAngle = 14
+    const seesawTransform =
         selection === "left"
-            ? `rotateZ(${-tiltAngle}deg)`
-            : "rotateZ(0deg)"
+            ? `rotateY(${-tiltAngle}deg)`
+            : `rotateY(${tiltAngle}deg)`
+
+    // Curved rim shadow on the pressed side. The plank has rounded ends, so an
+    // inset box-shadow follows the arc and reads as the button's edge sinking
+    // into the cavity on that side.
+    const pressedRimShadow =
+        selection === "left"
+            ? "inset 14px 0 16px -6px rgba(0,0,0,0.55)"
+            : "inset -14px 0 16px -6px rgba(0,0,0,0.55)"
 
     const hitAreaStyle: React.CSSProperties = {
         width: "50%",
@@ -395,7 +398,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         position: "absolute",
                         inset: shellPadding,
                         borderRadius: cavityRadius,
-                        overflow: "visible",
+                        overflow: "hidden",
                         background: palette.cavityBackground,
                         boxShadow: palette.cavityShadow,
                         transition: "box-shadow 220ms ease, background 220ms ease",
@@ -429,6 +432,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         bottom: pillInsetBottom,
                         left: pillInsetX,
                         right: pillInsetX,
+                        perspective: 900,
                         pointerEvents: "none",
                         zIndex: 2,
                     }}
@@ -436,76 +440,85 @@ export default function ClientWorkAiLabToggle(props: Props) {
                     <div
                         style={{
                             position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            width: "50%",
-                            borderRadius: `${pillRadius}px 0 0 ${pillRadius}px`,
+                            inset: 0,
+                            borderRadius: pillRadius,
                             background: palette.pillBackground,
-                            boxShadow: palette.pillShadow,
-                            transformOrigin: "100% 50%",
-                            transform: leftHalfTransform,
+                            boxShadow: `${pressedRimShadow}, ${palette.pillShadow}`,
+                            transformOrigin: "50% 50%",
+                            transform: seesawTransform,
+                            transformStyle: "preserve-3d",
                             transition:
-                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily,
-                            fontSize,
-                            fontWeight,
-                            letterSpacing: "-0.04em",
-                            lineHeight: 1,
-                            whiteSpace: "nowrap",
-                            color:
-                                selection === "left"
-                                    ? palette.activeTextColor
-                                    : palette.inactiveTextColor,
-                            textShadow:
-                                selection === "left"
-                                    ? palette.activeTextShadow
-                                    : palette.inactiveTextShadow,
+                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 520ms cubic-bezier(0.34, 1.35, 0.64, 1), background 220ms ease",
                         }}
                     >
-                        {leftLabel}
-                    </div>
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                borderRadius: "inherit",
+                                background: palette.pillSpecular,
+                                mixBlendMode: "screen",
+                                opacity: interactiveLight ? 1 : 0.82,
+                                pointerEvents: "none",
+                            }}
+                        />
 
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            right: 0,
-                            width: "50%",
-                            borderRadius: `0 ${pillRadius}px ${pillRadius}px 0`,
-                            background: palette.pillBackground,
-                            boxShadow: palette.pillShadow,
-                            transformOrigin: "0% 50%",
-                            transform: rightHalfTransform,
-                            transition:
-                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily,
-                            fontSize,
-                            fontWeight,
-                            letterSpacing: "-0.04em",
-                            lineHeight: 1,
-                            whiteSpace: "nowrap",
-                            color:
-                                selection === "right"
-                                    ? palette.activeTextColor
-                                    : palette.inactiveTextColor,
-                            textShadow:
-                                selection === "right"
-                                    ? palette.activeTextShadow
-                                    : palette.inactiveTextShadow,
-                            animation: accented
-                                ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
-                                : undefined,
-                        }}
-                    >
-                        {rightLabel}
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                display: "flex",
+                                alignItems: "center",
+                                pointerEvents: "none",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    fontFamily,
+                                    fontSize,
+                                    fontWeight,
+                                    letterSpacing: "-0.04em",
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap",
+                                    color:
+                                        selection === "left"
+                                            ? palette.activeTextColor
+                                            : palette.inactiveTextColor,
+                                    textShadow:
+                                        selection === "left"
+                                            ? palette.activeTextShadow
+                                            : palette.inactiveTextShadow,
+                                    transition: "color 220ms ease",
+                                }}
+                            >
+                                {leftLabel}
+                            </div>
+                            <div
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    fontFamily,
+                                    fontSize,
+                                    fontWeight,
+                                    letterSpacing: "-0.04em",
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap",
+                                    color:
+                                        selection === "right"
+                                            ? palette.activeTextColor
+                                            : palette.inactiveTextColor,
+                                    textShadow:
+                                        selection === "right"
+                                            ? palette.activeTextShadow
+                                            : palette.inactiveTextShadow,
+                                    transition: "color 220ms ease",
+                                }}
+                            >
+                                {rightLabel}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
