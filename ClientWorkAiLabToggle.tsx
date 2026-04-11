@@ -150,18 +150,24 @@ export default function ClientWorkAiLabToggle(props: Props) {
               `,
               pillAura: "none",
               pillBackground: `
-                  linear-gradient(180deg,
-                      rgba(248,244,237,1) 0%,
-                      rgba(245,240,232,1) 55%,
-                      rgba(236,230,220,1) 100%
+                  radial-gradient(ellipse 120% 140% at 50% 20%,
+                      rgba(252,249,243,1) 0%,
+                      rgba(248,244,237,1) 30%,
+                      rgba(243,237,228,1) 65%,
+                      rgba(228,220,206,1) 100%
                   )
               `,
               pillShadow: `
-                  0 ${6 + depth * 4}px ${14 + depth * 6}px rgba(0,0,0,0.36),
+                  0 ${10 + depth * 6}px ${24 + depth * 10}px rgba(0,0,0,0.48),
+                  0 ${4 + depth * 2}px ${8 + depth * 4}px rgba(0,0,0,0.34),
                   0 2px 4px rgba(0,0,0,0.24),
                   0 1px 1px rgba(0,0,0,0.18),
-                  inset 0 1px 0 rgba(255,255,255,0.9),
-                  inset 0 -1px 2px rgba(71,60,7,0.12)
+                  inset 0 2px 1px rgba(255,255,255,1),
+                  inset 0 1px 3px rgba(255,255,255,0.7),
+                  inset 0 -2px 1px rgba(71,60,7,0.18),
+                  inset 0 -4px 8px rgba(71,60,7,0.14),
+                  inset 3px 0 6px -1px rgba(255,255,255,0.35),
+                  inset -3px 0 6px -1px rgba(71,60,7,0.12)
               `,
               pillSpecular: `
                   linear-gradient(180deg,
