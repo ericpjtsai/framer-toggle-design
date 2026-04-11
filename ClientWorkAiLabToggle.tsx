@@ -755,7 +755,7 @@ ClientWorkAiLabToggle.defaultProps = {
     interactiveLight: true,
     defaultSelection: "left",
     theme: "dark",
-    fontSize: 30,
+    fontSize: 22,
     fontFamily: "Inter, sans-serif",
     fontWeight: 600,
     activeTextColor: "rgb(23, 25, 31)",
