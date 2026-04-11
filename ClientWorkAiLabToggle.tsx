@@ -104,6 +104,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const softRadius = Math.max(cornerRadius, 24)
     const cavityRadius = softRadius - shellPadding / 2
     const pillRadius = Math.max(cavityRadius - 8, 24)
+    const outerW = typeof style?.width === "number" ? style.width : 372
+    const outerH = typeof style?.height === "number" ? style.height : 118
+    const pillBoxW = Math.max((outerW - 2 * padding) / 2 - 10, 1)
+    const pillBoxH = Math.max(outerH - 4 * padding, 1)
     const ambientX = (lightPosition.x - 0.5) * 24 * glowStrength
     const ambientY = 16 + lightPosition.y * 18 * depthStrength
     const shellLightX = 14 + lightPosition.x * 58
@@ -363,24 +367,38 @@ export default function ClientWorkAiLabToggle(props: Props) {
           }
 
     const resetLight = React.useCallback(() => {
+        // Memorize the last light source angle on hover-out — don't snap back.
         setIsHovering(false)
-        setLightPosition({ x: 0.28, y: 0.22 })
     }, [])
 
-    const handlePointerMove = React.useCallback(
+    const updateLightFromEvent = React.useCallback(
         (event: React.PointerEvent<HTMLDivElement>) => {
             if (!interactiveLight) return
-
             const bounds = event.currentTarget.getBoundingClientRect()
             if (bounds.width === 0 || bounds.height === 0) return
-
             const nextX = Math.min(Math.max((event.clientX - bounds.left) / bounds.width, 0), 1)
             const nextY = Math.min(Math.max((event.clientY - bounds.top) / bounds.height, 0), 1)
-
-            setIsHovering(true)
             setLightPosition({ x: nextX, y: nextY })
         },
         [interactiveLight]
+    )
+
+    const handlePointerMove = React.useCallback(
+        (event: React.PointerEvent<HTMLDivElement>) => {
+            setIsHovering(true)
+            updateLightFromEvent(event)
+        },
+        [updateLightFromEvent]
+    )
+
+    const handlePointerEnter = React.useCallback(
+        (event: React.PointerEvent<HTMLDivElement>) => {
+            setIsHovering(true)
+            // Sync immediately so the memorized angle resets to the new entry point
+            // even before the first pointer-move fires.
+            updateLightFromEvent(event)
+        },
+        [updateLightFromEvent]
     )
 
     const navigateTo = React.useCallback(
@@ -446,7 +464,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
     return (
         <div
             onPointerMove={handlePointerMove}
-            onPointerEnter={() => setIsHovering(true)}
+            onPointerEnter={handlePointerEnter}
             onPointerLeave={resetLight}
             style={{
                 ...style,
@@ -459,13 +477,16 @@ export default function ClientWorkAiLabToggle(props: Props) {
             }}
         >
                 <style>{`
-                    @keyframes cwAiToggleHaloBreathe {
-                        0%, 100% { opacity: 0.72; }
-                        50% { opacity: 1; }
-                    }
                     @keyframes cwAiToggleSweep {
                         0% { transform: translateX(-120%); }
                         100% { transform: translateX(220%); }
+                    }
+                    @keyframes cwAiToggleChase {
+                        to { stroke-dashoffset: -100; }
+                    }
+                    @keyframes cwAiToggleBreathe {
+                        0%, 100% { opacity: 0.55; }
+                        50% { opacity: 1; }
                     }
                 `}</style>
                 {isDark && (
@@ -486,7 +507,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             `,
                             opacity: accented ? 1 : 0,
                             animation: accented
-                                ? "cwAiToggleHaloBreathe 3.4s ease-in-out infinite"
+                                ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
                                 : undefined,
                             pointerEvents: "none",
                             zIndex: 6,
@@ -538,6 +559,50 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         transition: "background 220ms ease",
                     }}
                 />
+
+                {accented && (
+                    <svg
+                        width={pillBoxW}
+                        height={pillBoxH}
+                        viewBox={`0 0 ${pillBoxW} ${pillBoxH}`}
+                        style={{
+                            position: "absolute",
+                            top: pillInsetTop,
+                            left: pillInsetX,
+                            width: pillBoxW,
+                            height: pillBoxH,
+                            transform: sliderTransform,
+                            overflow: "visible",
+                            pointerEvents: "none",
+                            zIndex: 1,
+                            transition:
+                                "transform 460ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            animation:
+                                "cwAiToggleBreathe 3.4s ease-in-out infinite",
+                        }}
+                    >
+                        <rect
+                            x={0}
+                            y={0}
+                            width={pillBoxW}
+                            height={pillBoxH}
+                            rx={Math.min(pillRadius, pillBoxH / 2)}
+                            ry={Math.min(pillRadius, pillBoxH / 2)}
+                            fill="none"
+                            stroke={haloColor}
+                            strokeWidth={6}
+                            strokeLinecap="round"
+                            pathLength={100}
+                            strokeDasharray="22 78"
+                            strokeDashoffset={0}
+                            style={{
+                                animation:
+                                    "cwAiToggleChase 4.5s linear infinite",
+                                filter: `drop-shadow(0 0 6px ${haloColor}) drop-shadow(0 0 14px ${toRgba(haloColor, 0.7)})`,
+                            }}
+                        />
+                    </svg>
+                )}
 
                 {palette.pillAura !== "none" && (
                     <div
