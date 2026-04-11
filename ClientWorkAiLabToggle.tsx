@@ -86,43 +86,41 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const accentSoftInsetX = 2.1 * figmaPillScale * accentDirection
     const accentDropX = 6.5 * figmaPillScale * accentDirection
 
+    // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
+    const accented = isDark && selection === "right"
+
     const palette = isDark
         ? {
               shellBackground: `
-                  linear-gradient(180deg,
-                      rgba(40,42,48,1) 0%,
-                      rgba(24,25,29,1) 38%,
-                      rgba(12,13,16,1) 72%,
-                      rgba(6,7,9,1) 100%
+                  linear-gradient(248deg,
+                      rgba(23,23,23,1) 45%,
+                      rgba(23,23,23,1) 47%,
+                      rgba(39,39,39,0.51) 98%
                   )
               `,
-              shellShadow: `
-                  0 ${18 + depth * 14}px ${36 + lightIntensity * 14}px rgba(0,0,0,0.65),
-                  0 2px 6px rgba(0,0,0,0.5),
-                  inset 0 1px 0 rgba(255,255,255,0.08),
-                  inset 0 -10px 18px rgba(0,0,0,0.55),
-                  inset 0 16px 22px rgba(255,255,255,0.03)
-              `,
+              shellShadow: accented
+                  ? `
+                      0 -11px 28px 4px rgba(15,15,15,1),
+                      -6px 13px 26px 0 rgba(42,42,44,1),
+                      0 0 70px 6px rgba(2,48,167,0.42),
+                      0 0 140px 18px rgba(2,48,167,0.18),
+                      inset -1px 59px 21px 0 rgba(0,0,0,0.2),
+                      inset 0 18px 7px 0 rgba(23,23,23,1)
+                  `
+                  : `
+                      0 -11px 28px 4px rgba(15,15,15,1),
+                      -6px 13px 26px 0 rgba(42,42,44,1),
+                      inset -1px 59px 21px 0 rgba(0,0,0,0.2),
+                      inset 0 18px 7px 0 rgba(23,23,23,1)
+                  `,
               cavityBackground: `
-                  radial-gradient(circle at ${cavityLightX}% ${cavityLightY}%,
-                      rgba(150,190,255,${0.08 * glowStrength}) 0%,
-                      rgba(150,190,255,${0.02 * glowStrength}) 22%,
-                      rgba(0,0,0,0) 40%
-                  ),
-                  radial-gradient(circle at 50% 60%,
-                      rgba(0,0,0,0.55) 0%,
-                      rgba(0,0,0,0.25) 38%,
-                      rgba(0,0,0,0) 64%
-                  ),
                   linear-gradient(180deg,
-                      rgba(10,11,14,1) 0%,
-                      rgba(5,6,9,1) 50%,
-                      rgba(8,9,12,1) 100%
+                      rgba(20,22,24,1) 0%,
+                      rgba(13,13,13,1) 100%
                   )
               `,
               cavityShadow: `
                   inset 0 2px 5px rgba(0,0,0,0.95),
-                  inset 0 1px 0 rgba(255,255,255,0.05),
                   inset 0 -1px 0 rgba(255,255,255,0.04),
                   inset 0 -14px 22px rgba(0,0,0,0.6),
                   inset 16px 0 22px rgba(0,0,0,0.35),
@@ -130,65 +128,73 @@ export default function ClientWorkAiLabToggle(props: Props) {
               `,
               cavitySheen: `
                   linear-gradient(180deg,
-                      rgba(255,255,255,0.05) 0%,
-                      rgba(255,255,255,0.0) 30%,
-                      rgba(255,255,255,0) 100%
+                      rgba(255,255,255,0.04) 0%,
+                      rgba(255,255,255,0) 30%
                   )
               `,
-              cavityHoverGlow: `
-                  radial-gradient(circle at ${cavityLightX - 4}% ${cavityLightY - 6}%,
-                      rgba(180,210,255,${isHovering ? 0.12 * glowStrength : 0.06 * glowStrength}) 0%,
-                      rgba(180,210,255,0) 38%
-                  )
-              `,
-              pillAura: `
-                  radial-gradient(circle at ${pillLightX}% ${pillLightY}%,
-                      rgba(190,215,255,0.85) 0%,
-                      rgba(150,185,235,0.32) 30%,
-                      rgba(120,160,220,0) 60%
-                  ),
-                  radial-gradient(circle at 50% 50%,
-                      rgba(170,200,250,0.55) 0%,
-                      rgba(170,200,250,0) 55%
-                  )
-              `,
+              cavityHoverGlow: accented
+                  ? `
+                      radial-gradient(circle at 28% 50%,
+                          rgba(31,58,211,${isHovering ? 0.18 : 0.12}) 0%,
+                          rgba(31,58,211,0) 50%
+                      )
+                  `
+                  : `
+                      radial-gradient(circle at ${cavityLightX - 4}% ${cavityLightY - 6}%,
+                          rgba(255,255,255,${isHovering ? 0.04 : 0.02}) 0%,
+                          rgba(255,255,255,0) 38%
+                      )
+                  `,
+              pillAura: "none",
               pillBackground: `
-                  radial-gradient(circle at ${pillLightX}% ${pillLightY}%,
-                      rgba(225,238,255,1) 0%,
-                      rgba(190,215,255,0.92) 20%,
-                      rgba(140,175,225,0.4) 46%,
-                      rgba(60,90,140,0.0) 70%
-                  ),
                   radial-gradient(circle at 30% 18%,
-                      rgba(255,255,255,0.7) 0%,
-                      rgba(255,255,255,0) 38%
+                      rgba(255,255,255,0.05) 0%,
+                      rgba(255,255,255,0) 40%
                   ),
                   linear-gradient(180deg,
-                      rgba(40,55,85,0.85) 0%,
-                      rgba(20,28,46,0.85) 100%
+                      rgba(34,36,38,1) 0%,
+                      rgba(20,22,24,1) 100%
                   )
               `,
-              pillShadow: `
-                  0 0 ${24 + lightIntensity * 18}px ${6 + lightIntensity * 4}px rgba(150,190,255,0.55),
-                  0 0 ${56 + lightIntensity * 24}px ${14 + lightIntensity * 6}px rgba(120,170,255,0.32),
-                  0 0 ${96}px ${22}px rgba(100,150,240,0.18),
-                  inset 0 0 ${8 * figmaPillScale}px rgba(255,255,255,0.55),
-                  inset 0 ${1.5 * figmaPillScale}px ${2 * figmaPillScale}px rgba(255,255,255,0.7),
-                  inset 0 ${-3 * figmaPillScale}px ${5 * figmaPillScale}px rgba(40,70,120,0.45),
-                  ${accentDropX}px ${6 * figmaPillScale}px ${14 * figmaPillScale}px rgba(0,0,0,0.55)
-              `,
+              pillShadow: accented
+                  ? `
+                      inset 4px 0 0 0 rgba(31,58,211,0.92),
+                      inset 7px 0 12px 0 rgba(31,58,211,0.44),
+                      inset -2px 11px 9px 4px rgba(255,255,255,0.12),
+                      inset -3px -9px 10px 0 rgba(0,0,0,0.75),
+                      inset 0 -30px 26px 0 rgba(0,0,0,0.37),
+                      inset -13px 14px 24px 0 rgba(255,255,255,0.25),
+                      -10px 15px 24px 21px rgba(0,0,0,0.46),
+                      26px 28px 58px 36px rgba(0,0,0,0.25),
+                      2px 20px 12px 0 rgba(0,0,0,0.68),
+                      2px 25px 12px 0 rgba(0,0,0,0.48)
+                  `
+                  : `
+                      inset -2px 11px 14px -1px rgba(255,255,255,0.18),
+                      inset -3px -9px 10px 0 rgba(0,0,0,0.75),
+                      inset 0 -30px 26px 0 rgba(0,0,0,0.37),
+                      inset -13px 14px 28px 0 rgba(255,255,255,0.08),
+                      -10px 15px 24px 21px rgba(0,0,0,0.46),
+                      2px 20px 12px 0 rgba(0,0,0,0.68),
+                      2px 23px 24px 0 rgba(0,0,0,0.03)
+                  `,
               pillSpecular: `
                   linear-gradient(118deg,
                       rgba(255,255,255,0) 22%,
-                      rgba(255,255,255,${0.18 + lightIntensity * 0.06}) 38%,
-                      rgba(255,255,255,0.06) 50%,
+                      rgba(255,255,255,${0.10 + lightIntensity * 0.04}) 38%,
+                      rgba(255,255,255,0.04) 50%,
                       rgba(255,255,255,0) 66%
                   )
               `,
-              activeTextColor: "rgba(245,250,255,1)",
-              inactiveTextColor: "rgba(118,126,140,0.55)",
-              activeTextShadow:
-                  "0 0 10px rgba(180,210,255,0.85), 0 0 2px rgba(255,255,255,0.95), 0 1px 0 rgba(0,0,0,0.4)",
+              activeTextColor: accented
+                  ? "rgba(245,250,255,1)"
+                  : "rgba(180,184,194,0.85)",
+              inactiveTextColor: accented
+                  ? "rgba(170,195,255,0.65)"
+                  : "rgba(100,108,122,0.5)",
+              activeTextShadow: accented
+                  ? "0 0 14px rgba(80,130,255,0.5), 0 0 2px rgba(255,255,255,0.7), 0 1px 0 rgba(0,0,0,0.6)"
+                  : "0 1px 0 rgba(0,0,0,0.6)",
               inactiveTextShadow: "0 1px 0 rgba(0,0,0,0.6)",
           }
         : {
@@ -455,23 +461,57 @@ export default function ClientWorkAiLabToggle(props: Props) {
                     }}
                 />
 
-                <div
-                    style={{
-                        position: "absolute",
-                        top: pillInsetTop + 12,
-                        bottom: pillInsetBottom + 2,
-                        left: pillInsetX + 8,
-                        width: "calc(50% - 10px)",
-                        transform: sliderTransform,
-                        borderRadius: pillRadius,
-                        background: palette.pillAura,
-                        filter: "blur(15px)",
-                        opacity: isDark ? 1 : 0.88,
-                        pointerEvents: "none",
-                        zIndex: 1,
-                        transition: "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease",
-                    }}
-                />
+                {isDark && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: pillInsetTop,
+                            bottom: pillInsetBottom,
+                            left: pillInsetX,
+                            width: "calc(50% - 10px)",
+                            borderRadius: pillRadius,
+                            background: `
+                                linear-gradient(184deg,
+                                    rgba(0,0,0,0.3) 14%,
+                                    rgba(0,0,0,0) 88%
+                                ),
+                                linear-gradient(-90deg,
+                                    rgba(21,82,243,1) 10%,
+                                    rgba(2,46,163,1) 100%
+                                )
+                            `,
+                            boxShadow: `
+                                inset -13px -6px 7px 0 rgba(0,0,0,0.47),
+                                inset 0 4px 6px rgba(255,255,255,0.16),
+                                -8px -3px 27px 6px rgba(2,48,167,0.56)
+                            `,
+                            opacity: accented ? 1 : 0,
+                            pointerEvents: "none",
+                            zIndex: 1,
+                            transition: "opacity 460ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        }}
+                    />
+                )}
+
+                {palette.pillAura !== "none" && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: pillInsetTop + 12,
+                            bottom: pillInsetBottom + 2,
+                            left: pillInsetX + 8,
+                            width: "calc(50% - 10px)",
+                            transform: sliderTransform,
+                            borderRadius: pillRadius,
+                            background: palette.pillAura,
+                            filter: "blur(15px)",
+                            opacity: 0.88,
+                            pointerEvents: "none",
+                            zIndex: 1,
+                            transition: "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease",
+                        }}
+                    />
+                )}
 
                 <div
                     style={{
