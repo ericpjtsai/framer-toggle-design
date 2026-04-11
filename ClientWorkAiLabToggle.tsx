@@ -313,14 +313,14 @@ export default function ClientWorkAiLabToggle(props: Props) {
     // V-hinged rocker: the two halves pivot around the shared center line.
     // The selected half stays flat at the cavity floor; the other half hinges
     // up from that seam, so the silhouette reads as "__/" or "\__".
-    const tiltAngle = 16
+    const tiltAngle = 12
     const leftHalfTransform =
         selection === "right"
-            ? `rotateZ(${tiltAngle}deg)`
+            ? `rotateZ(${-tiltAngle}deg)`
             : "rotateZ(0deg)"
     const rightHalfTransform =
         selection === "left"
-            ? `rotateZ(${-tiltAngle}deg)`
+            ? `rotateZ(${tiltAngle}deg)`
             : "rotateZ(0deg)"
 
     const hitAreaStyle: React.CSSProperties = {
