@@ -458,6 +458,16 @@ export default function ClientWorkAiLabToggle(props: Props) {
                 transition: "transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
         >
+                <style>{`
+                    @keyframes cwAiToggleHaloBreathe {
+                        0%, 100% { opacity: 0.72; }
+                        50% { opacity: 1; }
+                    }
+                    @keyframes cwAiToggleSweep {
+                        0% { transform: translateX(-120%); }
+                        100% { transform: translateX(220%); }
+                    }
+                `}</style>
                 {isDark && (
                     <div
                         style={{
@@ -475,6 +485,9 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 0 0 120px 28px ${toRgba(haloColor, 0.22)}
                             `,
                             opacity: accented ? 1 : 0,
+                            animation: accented
+                                ? "cwAiToggleHaloBreathe 3.4s ease-in-out infinite"
+                                : undefined,
                             pointerEvents: "none",
                             zIndex: 6,
                             transition:
@@ -581,6 +594,43 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease, opacity 220ms ease",
                     }}
                 />
+
+                {accented && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: pillInsetTop,
+                            bottom: pillInsetBottom,
+                            left: pillInsetX,
+                            width: "calc(50% - 10px)",
+                            borderRadius: pillRadius,
+                            transform: sliderTransform,
+                            overflow: "hidden",
+                            pointerEvents: "none",
+                            zIndex: 3,
+                            mixBlendMode: "screen",
+                            transition:
+                                "transform 460ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                width: "55%",
+                                background: `linear-gradient(105deg,
+                                    rgba(255,255,255,0) 0%,
+                                    rgba(255,255,255,0.08) 38%,
+                                    ${toRgba(haloColor, 0.55)} 50%,
+                                    rgba(255,255,255,0.08) 62%,
+                                    rgba(255,255,255,0) 100%)`,
+                                animation: "cwAiToggleSweep 4.2s linear infinite",
+                            }}
+                        />
+                    </div>
+                )}
 
                 <div
                     style={{
