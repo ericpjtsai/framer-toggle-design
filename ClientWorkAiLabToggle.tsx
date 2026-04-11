@@ -312,7 +312,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
 
     // Rocker-switch tilt: the selected side presses DOWN into the cavity,
     // the other side pops forward. Pressed side = active = dark text.
-    const tiltAngle = 14
+    const tiltAngle = 22
     const seesawTransform =
         selection === "left"
             ? `rotateY(${-tiltAngle}deg)`
@@ -398,7 +398,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         position: "absolute",
                         inset: shellPadding,
                         borderRadius: cavityRadius,
-                        overflow: "hidden",
+                        overflow: "visible",
                         background: palette.cavityBackground,
                         boxShadow: palette.cavityShadow,
                         transition: "box-shadow 220ms ease, background 220ms ease",
