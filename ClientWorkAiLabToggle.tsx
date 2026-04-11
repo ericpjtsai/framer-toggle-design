@@ -109,31 +109,32 @@ export default function ClientWorkAiLabToggle(props: Props) {
 
     const palette = isDark
         ? {
-              // Subtle light rocker: soft grey shell, cream plank, minimal
-              // shadows, and the "powered" state shows up as a glow behind the
-              // AI Lab label rather than wrapping the whole pill.
+              // Portfolio palette: charcoal #272725 shell, cream #f5f0e8 plank,
+              // olive #473c07 text, yellow #ffd200 halo.
               shellBackground: `
                   linear-gradient(180deg,
-                      rgba(231,232,236,1) 0%,
-                      rgba(218,220,225,1) 100%
+                      rgba(46,46,44,1) 0%,
+                      rgba(39,39,37,1) 55%,
+                      rgba(31,31,29,1) 100%
                   )
               `,
               shellShadow: `
-                  0 ${3 + depth * 3}px ${10 + depth * 4}px rgba(24,28,35,0.08),
-                  0 1px 2px rgba(24,28,35,0.05),
-                  inset 0 1px 0 rgba(255,255,255,0.95),
-                  inset 0 -1px 1px rgba(24,28,35,0.05)
+                  0 ${8 + depth * 6}px ${20 + depth * 8}px rgba(0,0,0,0.38),
+                  0 2px 4px rgba(0,0,0,0.28),
+                  inset 0 1px 0 rgba(255,255,255,0.06),
+                  inset 0 -1px 1px rgba(0,0,0,0.4)
               `,
               cavityBackground: `
                   linear-gradient(180deg,
-                      rgba(204,206,212,1) 0%,
-                      rgba(212,214,220,1) 100%
+                      rgba(23,23,21,1) 0%,
+                      rgba(26,26,24,1) 60%,
+                      rgba(30,30,28,1) 100%
                   )
               `,
               cavityShadow: `
-                  inset 0 2px 3px rgba(24,28,35,0.14),
-                  inset 0 1px 1px rgba(24,28,35,0.08),
-                  inset 0 -1px 0 rgba(255,255,255,0.5)
+                  inset 0 2px 4px rgba(0,0,0,0.55),
+                  inset 0 1px 1px rgba(0,0,0,0.35),
+                  inset 0 -1px 1px rgba(255,255,255,0.04)
               `,
               cavitySheen: `
                   linear-gradient(180deg,
@@ -143,37 +144,35 @@ export default function ClientWorkAiLabToggle(props: Props) {
               `,
               cavityHoverGlow: `
                   radial-gradient(circle at ${lightPosition.x * 100}% ${lightPosition.y * 100}%,
-                      rgba(255,255,255,${isHovering ? 0.18 : 0.08}) 0%,
-                      rgba(255,255,255,0) 50%
+                      rgba(245,240,232,${isHovering ? 0.05 : 0.02}) 0%,
+                      rgba(245,240,232,0) 45%
                   )
               `,
               pillAura: "none",
               pillBackground: `
                   linear-gradient(180deg,
-                      rgba(252,251,247,1) 0%,
-                      rgba(246,244,238,1) 100%
+                      rgba(248,244,237,1) 0%,
+                      rgba(245,240,232,1) 55%,
+                      rgba(236,230,220,1) 100%
                   )
               `,
               pillShadow: `
-                  0 ${4 + depth * 3}px ${10 + depth * 4}px rgba(24,28,35,0.1),
-                  0 1px 2px rgba(24,28,35,0.06),
-                  inset 0 1px 0 rgba(255,255,255,1),
-                  inset 0 -1px 1px rgba(24,28,35,0.06)
+                  0 ${6 + depth * 4}px ${14 + depth * 6}px rgba(0,0,0,0.36),
+                  0 2px 4px rgba(0,0,0,0.24),
+                  0 1px 1px rgba(0,0,0,0.18),
+                  inset 0 1px 0 rgba(255,255,255,0.9),
+                  inset 0 -1px 2px rgba(71,60,7,0.12)
               `,
               pillSpecular: `
                   linear-gradient(180deg,
-                      rgba(255,255,255,${0.18 + lightIntensity * 0.06}) 0%,
-                      rgba(255,255,255,0.04) 40%,
+                      rgba(255,255,255,${0.25 + lightIntensity * 0.08}) 0%,
+                      rgba(255,255,255,0.06) 40%,
                       rgba(255,255,255,0) 100%
                   )
               `,
-              activeTextColor: accented
-                  ? haloColor
-                  : "rgba(50,50,55,1)",
-              inactiveTextColor: "rgba(120,120,128,0.7)",
-              activeTextShadow: accented
-                  ? `0 0 8px ${toRgba(haloColor, 0.55)}, 0 0 18px ${toRgba(haloColor, 0.3)}, 0 0 32px ${toRgba(haloColor, 0.15)}`
-                  : "none",
+              activeTextColor: "rgba(71,60,7,1)",
+              inactiveTextColor: "rgba(71,60,7,0.35)",
+              activeTextShadow: "none",
               inactiveTextShadow: "none",
           }
         : {
@@ -342,10 +341,32 @@ export default function ClientWorkAiLabToggle(props: Props) {
         >
                 <style>{`
                     @keyframes cwAiToggleBreathe {
-                        0%, 100% { opacity: 0.72; }
+                        0%, 100% { opacity: 0.55; }
                         50% { opacity: 1; }
                     }
                 `}</style>
+
+                {accented && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: shellPadding + pillInsetTop,
+                            bottom: shellPadding + pillInsetBottom,
+                            left: shellPadding + pillInsetX,
+                            right: shellPadding + pillInsetX,
+                            borderRadius: pillRadius,
+                            boxShadow: `
+                                0 0 0 1.5px ${toRgba(haloColor, 0.6)},
+                                0 0 18px 4px ${toRgba(haloColor, 0.5)},
+                                0 0 42px 12px ${toRgba(haloColor, 0.28)},
+                                0 0 84px 20px ${toRgba(haloColor, 0.14)}
+                            `,
+                            animation: "cwAiToggleBreathe 3.4s ease-in-out infinite",
+                            pointerEvents: "none",
+                            zIndex: 6,
+                        }}
+                    />
+                )}
 
                 <div
                     style={{
@@ -479,9 +500,6 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                             ? palette.activeTextShadow
                                             : palette.inactiveTextShadow,
                                     transition: "color 220ms ease",
-                                    animation: accented
-                                        ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
-                                        : undefined,
                                 }}
                             >
                                 {rightLabel}
