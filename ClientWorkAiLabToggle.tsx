@@ -95,7 +95,6 @@ export default function ClientWorkAiLabToggle(props: Props) {
         setSelection(defaultSelection)
     }, [defaultSelection])
 
-    const depthStrength = 0.72 + depth * 0.78
     const glowStrength = 0.48 + lightIntensity * 0.95
     const shellPadding = padding
     const pillInsetX = padding
@@ -108,21 +107,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const outerH = typeof style?.height === "number" ? style.height : 118
     const pillBoxW = Math.max((outerW - 2 * padding) / 2 - 10, 1)
     const pillBoxH = Math.max(outerH - 4 * padding, 1)
-    const ambientX = (lightPosition.x - 0.5) * 24 * glowStrength
-    const ambientY = 16 + lightPosition.y * 18 * depthStrength
-    const shellLightX = 14 + lightPosition.x * 58
-    const shellLightY = 8 + lightPosition.y * 30
-    const cavityLightX = 16 + lightPosition.x * 66
-    const cavityLightY = 14 + lightPosition.y * 30
-    const pillLightX = 22 + lightPosition.x * 26
-    const pillLightY = 12 + lightPosition.y * 10
     const activeLabel = selection === "left" ? leftLabel : rightLabel
-    const figmaTrackScale = 0.76 + depth * 0.18
-    const figmaPillScale = 0.7 + depth * 0.18
-    const accentDirection = selection === "right" ? 1 : -1
-    const accentHardInsetX = 1.1 * figmaPillScale * accentDirection
-    const accentSoftInsetX = 2.1 * figmaPillScale * accentDirection
-    const accentDropX = 6.5 * figmaPillScale * accentDirection
 
     // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
     const accented = isDark && selection === "right"
@@ -244,126 +229,67 @@ export default function ClientWorkAiLabToggle(props: Props) {
         : {
               shellBackground: `
                   linear-gradient(180deg,
-                      rgba(255,255,255,0.98) 0%,
-                      ${shellTint} 34%,
-                      rgba(221,225,232,1) 72%,
-                      rgba(191,196,205,1) 100%
+                      rgba(255,255,255,1) 0%,
+                      ${shellTint} 50%,
+                      rgba(228,230,234,1) 100%
                   )
               `,
               shellShadow: `
-                  0 ${12 + depth * 10}px ${26 + lightIntensity * 10}px rgba(24,28,35,0.12),
-                  0 2px 6px rgba(255,255,255,0.7),
-                  inset 0 2px 1px rgba(255,255,255,1),
-                  inset 0 -10px 16px rgba(133,140,151,0.18),
-                  inset 0 16px 20px rgba(255,255,255,0.34)
+                  0 ${10 + depth * 8}px ${22 + lightIntensity * 8}px rgba(24,28,35,0.08),
+                  0 1px 2px rgba(0,0,0,0.04),
+                  inset 0 1px 0 rgba(255,255,255,0.95),
+                  inset 0 -8px 14px rgba(198,202,210,0.22)
               `,
               cavityBackground: `
-                  radial-gradient(circle at ${cavityLightX}% ${cavityLightY}%,
-                      rgba(255,255,255,${0.08 * glowStrength}) 0%,
-                      rgba(255,255,255,${0.02 * glowStrength}) 18%,
-                      rgba(255,255,255,0) 34%
-                  ),
-                  radial-gradient(circle at ${cavityLightX + 18}% ${cavityLightY + 12}%,
-                      rgba(255,255,255,${0.03 * glowStrength}) 0%,
-                      rgba(255,255,255,0) 26%
-                  ),
-                  radial-gradient(circle at 72% 50%,
-                      rgba(0,0,0,0.42) 0%,
-                      rgba(0,0,0,0.14) 28%,
-                      rgba(0,0,0,0) 52%
-                  ),
                   linear-gradient(180deg,
-                      rgba(56,58,63,0.98) 0%,
-                      rgba(31,33,37,1) 24%,
-                      rgba(18,19,23,1) 58%,
-                      rgba(33,35,40,0.98) 100%
+                      rgba(232,234,238,1) 0%,
+                      rgba(240,242,246,1) 60%,
+                      rgba(245,246,249,1) 100%
                   )
               `,
               cavityShadow: `
-                  inset 0 1px 0 rgba(255,255,255,0.08),
-                  inset 0 10px 14px rgba(255,255,255,0.04),
-                  inset 0 -18px 28px rgba(0,0,0,0.34),
-                  inset 16px 0 22px rgba(255,255,255,0.02),
-                  inset -20px 0 28px rgba(0,0,0,0.18)
+                  inset 0 2px 4px rgba(24,28,35,0.12),
+                  inset 0 1px 1px rgba(24,28,35,0.06),
+                  inset 0 -1px 1px rgba(255,255,255,0.7)
               `,
               cavitySheen: `
                   linear-gradient(180deg,
-                      rgba(255,255,255,0.18) 0%,
-                      rgba(255,255,255,0.02) 20%,
-                      rgba(255,255,255,0) 54%
+                      rgba(255,255,255,0) 0%,
+                      rgba(255,255,255,0) 100%
                   )
               `,
               cavityHoverGlow: `
-                  radial-gradient(circle at ${cavityLightX - 4}% ${cavityLightY - 6}%,
-                      rgba(255,255,255,${isHovering ? 0.14 * glowStrength : 0.08 * glowStrength}) 0%,
-                      rgba(255,255,255,0) 34%
+                  radial-gradient(circle at ${lightPosition.x * 100}% ${lightPosition.y * 100}%,
+                      rgba(255,255,255,${isHovering ? 0.35 : 0.18}) 0%,
+                      rgba(255,255,255,0) 50%
                   )
               `,
-              pillAura: `
-                  radial-gradient(circle at ${pillLightX}% ${pillLightY}%,
-                      rgba(255,255,255,0.78) 0%,
-                      rgba(255,255,255,0.18) 28%,
-                      rgba(255,255,255,0) 54%
-                  ),
-                  radial-gradient(circle at 34% 16%,
-                      rgba(255,255,255,0.42) 0%,
-                      rgba(255,255,255,0) 34%
-                  ),
-                  radial-gradient(circle at 50% 110%,
-                      rgba(90,95,107,0.24) 0%,
-                      rgba(90,95,107,0) 45%
-                  )
-              `,
+              pillAura: "none",
               pillBackground: `
-                  radial-gradient(circle at ${pillLightX}% ${pillLightY}%,
-                      rgba(255,255,255,1) 0%,
-                      rgba(255,255,255,0.94) 18%,
-                      rgba(255,255,255,0.26) 38%,
-                      rgba(255,255,255,0) 62%
-                  ),
-                  radial-gradient(circle at 26% 14%,
-                      rgba(255,255,255,0.82) 0%,
-                      rgba(255,255,255,0.34) 18%,
-                      rgba(255,255,255,0) 44%
-                  ),
-                  radial-gradient(circle at 68% 82%,
-                      rgba(191,198,210,0.14) 0%,
-                      rgba(191,198,210,0) 44%
-                  ),
                   linear-gradient(180deg,
                       rgba(255,255,255,1) 0%,
-                      rgba(249,250,252,1) 34%,
-                      rgba(242,244,247,1) 64%,
-                      rgba(232,236,241,1) 100%
+                      rgba(252,253,254,1) 50%,
+                      rgba(247,248,250,1) 100%
                   )
               `,
               pillShadow: `
-                  ${accentHardInsetX}px 0 0 rgba(215,220,228,0.58) inset,
-                  ${accentSoftInsetX}px 0 ${4.2 * figmaPillScale}px rgba(215,220,228,0.3) inset,
-                  ${-3.2 * figmaPillScale}px ${5.4 * figmaPillScale}px ${8.8 * figmaPillScale}px ${5.8 * figmaPillScale}px rgba(0,0,0,0.22),
-                  ${-0.82 * figmaPillScale}px ${4.5 * figmaPillScale}px ${3.69 * figmaPillScale}px ${1.64 * figmaPillScale}px rgba(255,255,255,0.12) inset,
-                  ${-1.23 * figmaPillScale}px ${-3.68 * figmaPillScale}px ${4.09 * figmaPillScale}px rgba(0,0,0,0.3) inset,
-                  0 ${-9.2 * figmaPillScale}px ${8.2 * figmaPillScale}px rgba(0,0,0,0.08) inset,
-                  ${-4.4 * figmaPillScale}px ${4.8 * figmaPillScale}px ${8.2 * figmaPillScale}px rgba(255,255,255,0.18) inset,
-                  ${accentDropX}px ${9.4 * figmaPillScale}px ${18 * figmaPillScale}px ${8 * figmaPillScale}px rgba(0,0,0,0.14),
-                  ${0.82 * figmaPillScale}px ${7.2 * figmaPillScale}px ${4.2 * figmaPillScale}px rgba(0,0,0,0.18),
-                  ${ambientX * 0.12}px ${8 + lightPosition.y * 4}px ${10 + lightIntensity * 5}px rgba(154,161,173,0.12)
+                  0 ${6 + depth * 4}px ${14 + depth * 6}px rgba(24,28,35,0.1),
+                  0 2px 4px rgba(24,28,35,0.06),
+                  0 1px 1px rgba(24,28,35,0.04),
+                  inset 0 1px 0 rgba(255,255,255,1),
+                  inset 0 -1px 2px rgba(198,202,210,0.3)
               `,
               pillSpecular: `
-                  linear-gradient(118deg,
-                      rgba(255,255,255,0) 18%,
-                      rgba(255,255,255,${0.34 + lightIntensity * 0.08}) 34%,
-                      rgba(255,255,255,0.14) 46%,
-                      rgba(255,255,255,0.04) 56%,
-                      rgba(255,255,255,0) 66%
+                  linear-gradient(180deg,
+                      rgba(255,255,255,${0.25 + lightIntensity * 0.1}) 0%,
+                      rgba(255,255,255,0.05) 40%,
+                      rgba(255,255,255,0) 100%
                   )
               `,
               activeTextColor,
               inactiveTextColor,
-              activeTextShadow:
-                  "0 1px 0 rgba(255,255,255,0.8), 0 10px 18px rgba(0,0,0,0.06)",
-              inactiveTextShadow:
-                  "0 1px 0 rgba(255,255,255,0.06), 0 8px 18px rgba(0,0,0,0.28)",
+              activeTextShadow: "0 1px 0 rgba(255,255,255,0.8)",
+              inactiveTextShadow: "0 1px 0 rgba(255,255,255,0.8)",
           }
 
     const resetLight = React.useCallback(() => {
@@ -555,6 +481,21 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         transition: "background 220ms ease",
                     }}
                 />
+
+                {!isDark && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: pillInsetTop + 6,
+                            bottom: pillInsetBottom + 6,
+                            left: "calc(50% - 0.5px)",
+                            width: 1,
+                            background: "rgba(24,28,35,0.08)",
+                            pointerEvents: "none",
+                            zIndex: 0,
+                        }}
+                    />
+                )}
 
                 {accented && (
                     <svg
@@ -754,8 +695,8 @@ ClientWorkAiLabToggle.defaultProps = {
     openInNewTab: false,
     interactiveLight: true,
     defaultSelection: "left",
-    theme: "dark",
-    fontSize: 30,
+    theme: "light",
+    fontSize: 18,
     fontFamily: "Inter, sans-serif",
     fontWeight: 600,
     activeTextColor: "rgb(23, 25, 31)",
