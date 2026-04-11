@@ -103,11 +103,6 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const softRadius = Math.max(cornerRadius, 24)
     const cavityRadius = softRadius - shellPadding / 2
     const pillRadius = Math.max(cavityRadius - 8, 24)
-    const outerW = typeof style?.width === "number" ? style.width : 372
-    const outerH = typeof style?.height === "number" ? style.height : 118
-    const pillBoxW = Math.max((outerW - 2 * padding) / 2 - 10, 1)
-    const pillBoxH = Math.max(outerH - 4 * padding, 1)
-    const activeLabel = selection === "left" ? leftLabel : rightLabel
 
     // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
     const accented = isDark && selection === "right"
@@ -355,25 +350,14 @@ export default function ClientWorkAiLabToggle(props: Props) {
         [leftLink, navigateTo, rightLink]
     )
 
-    const sliderTransform =
+    // Rocker-switch tilt: the selected side rotates backward into the cavity,
+    // the other pops forward. Negative rotateY = left edge toward viewer,
+    // positive = right edge toward viewer.
+    const tiltAngle = 14
+    const seesawTransform =
         selection === "left"
-            ? `translateX(0%) translateY(${isHovering ? -1 : 0}px)`
-            : `translateX(100%) translateY(${isHovering ? -1 : 0}px)`
-
-    const labelBaseStyle: React.CSSProperties = {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "50%",
-        height: "100%",
-        fontFamily,
-        fontSize,
-        fontWeight,
-        letterSpacing: "-0.06em",
-        lineHeight: 1,
-        whiteSpace: "nowrap",
-        userSelect: "none",
-    }
+            ? `rotateY(${tiltAngle}deg)`
+            : `rotateY(${-tiltAngle}deg)`
 
     const hitAreaStyle: React.CSSProperties = {
         width: "50%",
@@ -402,43 +386,6 @@ export default function ClientWorkAiLabToggle(props: Props) {
                 transition: "transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
         >
-                <style>{`
-                    @keyframes cwAiToggleChase {
-                        to { stroke-dashoffset: -100; }
-                    }
-                    @keyframes cwAiToggleBreathe {
-                        0%, 100% { opacity: 0.55; }
-                        50% { opacity: 1; }
-                    }
-                `}</style>
-                {isDark && (
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: pillInsetTop + shellPadding,
-                            bottom: pillInsetBottom + shellPadding,
-                            left: pillInsetX + shellPadding,
-                            width: `calc(50% - ${10 + shellPadding}px)`,
-                            borderRadius: pillRadius,
-                            transform: sliderTransform,
-                            boxShadow: `
-                                0 0 0 2px ${toRgba(haloColor, 0.75)},
-                                0 0 24px 6px ${toRgba(haloColor, 0.6)},
-                                0 0 60px 16px ${toRgba(haloColor, 0.4)},
-                                0 0 120px 28px ${toRgba(haloColor, 0.22)}
-                            `,
-                            opacity: accented ? 1 : 0,
-                            animation: accented
-                                ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
-                                : undefined,
-                            pointerEvents: "none",
-                            zIndex: 6,
-                            transition:
-                                "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease",
-                        }}
-                    />
-                )}
-
                 <div
                     style={{
                         position: "absolute",
@@ -482,177 +429,101 @@ export default function ClientWorkAiLabToggle(props: Props) {
                     }}
                 />
 
-                {!isDark && (
+                <div
+                    style={{
+                        position: "absolute",
+                        top: pillInsetTop,
+                        bottom: pillInsetBottom,
+                        left: pillInsetX,
+                        right: pillInsetX,
+                        perspective: 900,
+                        pointerEvents: "none",
+                        zIndex: 2,
+                    }}
+                >
                     <div
                         style={{
                             position: "absolute",
-                            top: pillInsetTop + 6,
-                            bottom: pillInsetBottom + 6,
-                            left: "calc(50% - 0.5px)",
-                            width: 1,
-                            background: "rgba(24,28,35,0.08)",
-                            pointerEvents: "none",
-                            zIndex: 0,
-                        }}
-                    />
-                )}
-
-                {accented && (
-                    <svg
-                        width={pillBoxW}
-                        height={pillBoxH}
-                        viewBox={`0 0 ${pillBoxW} ${pillBoxH}`}
-                        style={{
-                            position: "absolute",
-                            top: pillInsetTop,
-                            left: pillInsetX,
-                            width: pillBoxW,
-                            height: pillBoxH,
-                            transform: sliderTransform,
-                            overflow: "visible",
-                            pointerEvents: "none",
-                            zIndex: 1,
+                            inset: 0,
+                            borderRadius: pillRadius,
+                            background: palette.pillBackground,
+                            boxShadow: palette.pillShadow,
+                            transformOrigin: "50% 50%",
+                            transform: seesawTransform,
+                            transformStyle: "preserve-3d",
                             transition:
-                                "transform 460ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            animation:
-                                "cwAiToggleBreathe 3.4s ease-in-out infinite",
+                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease",
                         }}
                     >
-                        <rect
-                            x={0}
-                            y={0}
-                            width={pillBoxW}
-                            height={pillBoxH}
-                            rx={Math.min(pillRadius, pillBoxH / 2)}
-                            ry={Math.min(pillRadius, pillBoxH / 2)}
-                            fill="none"
-                            stroke={haloColor}
-                            strokeWidth={6}
-                            strokeLinecap="round"
-                            pathLength={100}
-                            strokeDasharray="22 78"
-                            strokeDashoffset={0}
+                        <div
                             style={{
-                                animation:
-                                    "cwAiToggleChase 4.5s linear infinite",
-                                filter: `drop-shadow(0 0 6px ${haloColor}) drop-shadow(0 0 14px ${toRgba(haloColor, 0.7)})`,
+                                position: "absolute",
+                                inset: 0,
+                                borderRadius: "inherit",
+                                background: palette.pillSpecular,
+                                mixBlendMode: "screen",
+                                opacity: interactiveLight ? 1 : 0.82,
+                                pointerEvents: "none",
                             }}
                         />
-                    </svg>
-                )}
 
-                {palette.pillAura !== "none" && (
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: pillInsetTop + 12,
-                            bottom: pillInsetBottom + 2,
-                            left: pillInsetX + 8,
-                            width: "calc(50% - 10px)",
-                            transform: sliderTransform,
-                            borderRadius: pillRadius,
-                            background: palette.pillAura,
-                            filter: "blur(15px)",
-                            opacity: 0.88,
-                            pointerEvents: "none",
-                            zIndex: 1,
-                            transition: "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease",
-                        }}
-                    />
-                )}
-
-                <div
-                    style={{
-                        position: "absolute",
-                        top: pillInsetTop,
-                        bottom: pillInsetBottom,
-                        left: pillInsetX,
-                        width: "calc(50% - 10px)",
-                        borderRadius: pillRadius,
-                        transform: sliderTransform,
-                        background: palette.pillBackground,
-                        boxShadow: palette.pillShadow,
-                        zIndex: 2,
-                        transition:
-                            "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease, background 220ms ease",
-                    }}
-                />
-
-                <div
-                    style={{
-                        position: "absolute",
-                        top: pillInsetTop,
-                        bottom: pillInsetBottom,
-                        left: pillInsetX,
-                        width: "calc(50% - 10px)",
-                        borderRadius: pillRadius,
-                        transform: sliderTransform,
-                        background: palette.pillSpecular,
-                        mixBlendMode: "screen",
-                        opacity: interactiveLight ? 1 : 0.82,
-                        pointerEvents: "none",
-                        zIndex: 3,
-                        transition:
-                            "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), background 220ms ease, opacity 220ms ease",
-                    }}
-                />
-
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        zIndex: 0,
-                        display: "flex",
-                        pointerEvents: "none",
-                    }}
-                >
-                    <div
-                        style={{
-                            ...labelBaseStyle,
-                            color: palette.inactiveTextColor,
-                            textShadow: palette.inactiveTextShadow,
-                        }}
-                    >
-                        {leftLabel}
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                display: "flex",
+                                alignItems: "center",
+                                pointerEvents: "none",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    fontFamily,
+                                    fontSize,
+                                    fontWeight,
+                                    letterSpacing: "-0.04em",
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap",
+                                    color:
+                                        selection === "left"
+                                            ? palette.activeTextColor
+                                            : palette.inactiveTextColor,
+                                    textShadow:
+                                        selection === "left"
+                                            ? palette.activeTextShadow
+                                            : palette.inactiveTextShadow,
+                                    transition: "color 220ms ease",
+                                }}
+                            >
+                                {leftLabel}
+                            </div>
+                            <div
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    fontFamily,
+                                    fontSize,
+                                    fontWeight,
+                                    letterSpacing: "-0.04em",
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap",
+                                    color:
+                                        selection === "right"
+                                            ? palette.activeTextColor
+                                            : palette.inactiveTextColor,
+                                    textShadow:
+                                        selection === "right"
+                                            ? palette.activeTextShadow
+                                            : palette.inactiveTextShadow,
+                                    transition: "color 220ms ease",
+                                }}
+                            >
+                                {rightLabel}
+                            </div>
+                        </div>
                     </div>
-                    <div
-                        style={{
-                            ...labelBaseStyle,
-                            color: palette.inactiveTextColor,
-                            textShadow: palette.inactiveTextShadow,
-                        }}
-                    >
-                        {rightLabel}
-                    </div>
-                </div>
-
-                <div
-                    style={{
-                        position: "absolute",
-                        top: pillInsetTop,
-                        bottom: pillInsetBottom,
-                        left: pillInsetX,
-                        width: "calc(50% - 10px)",
-                        borderRadius: pillRadius,
-                        transform: sliderTransform,
-                        zIndex: 4,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "0 18px",
-                        pointerEvents: "none",
-                        color: palette.activeTextColor,
-                        fontFamily,
-                        fontSize,
-                        fontWeight,
-                        letterSpacing: "-0.06em",
-                        lineHeight: 1,
-                        whiteSpace: "nowrap",
-                        textShadow: palette.activeTextShadow,
-                        transition: "transform 460ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms ease",
-                    }}
-                >
-                    {activeLabel}
                 </div>
 
                 <div
