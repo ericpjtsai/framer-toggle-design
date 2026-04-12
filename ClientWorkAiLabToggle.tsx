@@ -455,13 +455,16 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         <div
                             style={{
                                 position: "absolute",
-                                inset: 0,
-                                borderRadius: "inherit",
+                                top: -5,
+                                bottom: -5,
+                                left: -5,
+                                right: -5,
+                                borderRadius: `${pillRadius + 5}px 0 0 ${pillRadius + 5}px`,
                                 background:
-                                    "linear-gradient(180deg, rgba(78,64,16,1) 0%, rgba(52,43,10,1) 55%, rgba(36,30,6,1) 100%)",
+                                    "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
                                 boxShadow:
-                                    "0 6px 10px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(0,0,0,0.5)",
-                                transform: "translateZ(-10px)",
+                                    "0 10px 18px rgba(0,0,0,0.55), 0 4px 6px rgba(0,0,0,0.4), inset 0 -2px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,120,0.15)",
+                                transform: "translateZ(-16px)",
                             }}
                         />
                         <div
@@ -483,15 +486,9 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 lineHeight: 1,
                                 whiteSpace: "nowrap",
                                 transition:
-                                    "box-shadow 220ms ease, background 220ms ease, color 220ms ease",
-                                color:
-                                    selection === "left"
-                                        ? palette.activeTextColor
-                                        : palette.inactiveTextColor,
-                                textShadow:
-                                    selection === "left"
-                                        ? palette.activeTextShadow
-                                        : palette.inactiveTextShadow,
+                                    "box-shadow 220ms ease, background 220ms ease",
+                                color: palette.activeTextColor,
+                                textShadow: palette.activeTextShadow,
                             }}
                         >
                             {leftLabel}
@@ -517,13 +514,16 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         <div
                             style={{
                                 position: "absolute",
-                                inset: 0,
-                                borderRadius: "inherit",
+                                top: -5,
+                                bottom: -5,
+                                left: -5,
+                                right: -5,
+                                borderRadius: `0 ${pillRadius + 5}px ${pillRadius + 5}px 0`,
                                 background:
-                                    "linear-gradient(180deg, rgba(78,64,16,1) 0%, rgba(52,43,10,1) 55%, rgba(36,30,6,1) 100%)",
+                                    "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
                                 boxShadow:
-                                    "0 6px 10px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(0,0,0,0.5)",
-                                transform: "translateZ(-10px)",
+                                    "0 10px 18px rgba(0,0,0,0.55), 0 4px 6px rgba(0,0,0,0.4), inset 0 -2px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,120,0.15)",
+                                transform: "translateZ(-16px)",
                             }}
                         />
                         <div
@@ -545,18 +545,9 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 lineHeight: 1,
                                 whiteSpace: "nowrap",
                                 transition:
-                                    "box-shadow 220ms ease, background 220ms ease, color 220ms ease",
-                                color:
-                                    selection === "right"
-                                        ? palette.activeTextColor
-                                        : palette.inactiveTextColor,
-                                textShadow:
-                                    selection === "right"
-                                        ? palette.activeTextShadow
-                                        : palette.inactiveTextShadow,
-                                animation: accented
-                                    ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
-                                    : undefined,
+                                    "box-shadow 220ms ease, background 220ms ease",
+                                color: palette.activeTextColor,
+                                textShadow: palette.activeTextShadow,
                             }}
                         >
                             {rightLabel}
