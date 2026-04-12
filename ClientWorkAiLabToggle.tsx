@@ -106,10 +106,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
 
     // Auto-size the toggle based on fontSize, so changing the Size control
     // in Framer makes the whole switch grow or shrink proportionally. Ratios
-    // tuned so the labels sit snug against the pill edges without a lot of
-    // wasted margin on either side.
-    const autoWidth = Math.round(fontSize * 17)
-    const autoHeight = Math.round(fontSize * 5.6)
+    // tuned so the labels sit snug against the pill edges with a tighter
+    // vertical margin — more button, less wasted whitespace around the text.
+    const autoWidth = Math.round(fontSize * 15)
+    const autoHeight = Math.round(fontSize * 3.5)
 
     // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
     const accented = isDark && selection === "right"
@@ -371,10 +371,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             right: shellPadding + pillInsetX,
                             borderRadius: pillRadius,
                             boxShadow: `
-                                0 0 0 1.5px ${toRgba(haloColor, 0.6)},
-                                0 0 18px 4px ${toRgba(haloColor, 0.5)},
-                                0 0 42px 12px ${toRgba(haloColor, 0.28)},
-                                0 0 84px 20px ${toRgba(haloColor, 0.14)}
+                                0 0 0 2px ${toRgba(haloColor, 0.9)},
+                                0 0 14px 4px ${toRgba(haloColor, 0.85)},
+                                0 0 32px 10px ${toRgba(haloColor, 0.6)},
+                                0 0 68px 22px ${toRgba(haloColor, 0.38)},
+                                0 0 128px 40px ${toRgba(haloColor, 0.2)}
                             `,
                             animation: "cwAiToggleBreathe 3.4s ease-in-out infinite",
                             pointerEvents: "none",
@@ -606,7 +607,7 @@ ClientWorkAiLabToggle.defaultProps = {
     inactiveTextColor: "rgba(71, 60, 7, 0.35)",
     shellTint: "rgb(39, 39, 37)",
     haloColor: "rgb(10, 132, 255)",
-    padding: 10,
+    padding: 6,
     depth: 0.68,
     lightIntensity: 0.42,
     cornerRadius: 999,
