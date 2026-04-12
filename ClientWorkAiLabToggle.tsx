@@ -385,7 +385,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                     }
                 `}</style>
 
-                {accented && (
+                {isDark && (
                     <div
                         style={{
                             position: "absolute",
@@ -394,18 +394,30 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             left: shellPadding + pillInsetX,
                             right: shellPadding + pillInsetX,
                             borderRadius: pillRadius,
-                            boxShadow: `
-                                0 0 0 2px ${toRgba(haloColor, 0.9)},
-                                0 0 14px 4px ${toRgba(haloColor, 0.85)},
-                                0 0 32px 10px ${toRgba(haloColor, 0.6)},
-                                0 0 68px 22px ${toRgba(haloColor, 0.38)},
-                                0 0 128px 40px ${toRgba(haloColor, 0.2)}
-                            `,
-                            animation: "cwAiToggleBreathe 3.4s ease-in-out infinite",
+                            opacity: accented ? 1 : 0,
+                            transition: "opacity 800ms ease-in-out",
                             pointerEvents: "none",
                             zIndex: 6,
                         }}
-                    />
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                borderRadius: "inherit",
+                                boxShadow: `
+                                    0 0 0 2px ${toRgba(haloColor, 0.9)},
+                                    0 0 14px 4px ${toRgba(haloColor, 0.85)},
+                                    0 0 32px 10px ${toRgba(haloColor, 0.6)},
+                                    0 0 68px 22px ${toRgba(haloColor, 0.38)},
+                                    0 0 128px 40px ${toRgba(haloColor, 0.2)}
+                                `,
+                                animation: accented
+                                    ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
+                                    : undefined,
+                            }}
+                        />
+                    </div>
                 )}
 
                 <div
