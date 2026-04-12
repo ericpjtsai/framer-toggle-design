@@ -126,16 +126,12 @@ export default function ClientWorkAiLabToggle(props: Props) {
               `,
               cavityBackground: `
                   linear-gradient(180deg,
-                      rgba(23,23,21,1) 0%,
-                      rgba(26,26,24,1) 60%,
-                      rgba(30,30,28,1) 100%
+                      rgba(46,46,44,1) 0%,
+                      rgba(39,39,37,1) 55%,
+                      rgba(31,31,29,1) 100%
                   )
               `,
-              cavityShadow: `
-                  inset 0 2px 4px rgba(0,0,0,0.55),
-                  inset 0 1px 1px rgba(0,0,0,0.35),
-                  inset 0 -1px 1px rgba(255,255,255,0.04)
-              `,
+              cavityShadow: "none",
               cavitySheen: `
                   linear-gradient(180deg,
                       rgba(0,0,0,0) 0%,
@@ -314,7 +310,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
     // line. The selected half stays flat at the cavity floor; the other half
     // hinges FORWARD (out of the screen) via rotateY, so the raised edge
     // pops toward the viewer like a real rocker cap.
-    const tiltAngle = 26
+    const tiltAngle = 18
     const leftHalfTransform =
         selection === "right"
             ? `rotateY(${tiltAngle}deg)`
