@@ -361,27 +361,27 @@ export default function ClientWorkAiLabToggle(props: Props) {
             onPointerMove={handlePointerMove}
             onPointerEnter={handlePointerEnter}
             onPointerLeave={resetLight}
-            data-toggle-scale="cwai"
             style={{
                 ...style,
-                width: autoWidth,
-                height: autoHeight,
+                width: displayWidth,
+                height: displayHeight,
                 position: "relative",
                 overflow: "visible",
             }}
         >
+            <div
+                style={{
+                    width: autoWidth,
+                    height: autoHeight,
+                    position: "relative",
+                    transform: scale < 1 ? `scale(${scale})` : undefined,
+                    transformOrigin: "0 0",
+                }}
+            >
                 <style>{`
                     @keyframes cwAiToggleBreathe {
                         0%, 100% { opacity: 0.55; }
                         50% { opacity: 1; }
-                    }
-                    @media (max-width: 768px) {
-                        [data-toggle-scale="cwai"] {
-                            width: ${displayWidth}px !important;
-                            height: ${displayHeight}px !important;
-                            transform: scale(${scale});
-                            transform-origin: 0 0;
-                        }
                     }
                 `}</style>
 
@@ -505,10 +505,8 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 transform: "translateZ(0px)",
                                 backfaceVisibility: "hidden",
                                 display: "flex",
-                                flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: dotGap,
                                 fontFamily,
                                 fontSize,
                                 fontWeight,
@@ -524,13 +522,17 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 textShadow: palette.activeTextShadow,
                             }}
                         >
-                            <span>{leftLabel}</span>
+                            {leftLabel}
                             <div
                                 style={{
+                                    position: "absolute",
+                                    left: "50%",
+                                    top: `calc(50% + ${fontSize / 2 + dotGap}px)`,
                                     width: dotSize,
                                     height: dotSize,
                                     borderRadius: "50%",
                                     background: leftAccentColor,
+                                    transform: "translateX(-50%)",
                                     opacity: selection === "left" ? 1 : 0,
                                     transition:
                                         "opacity 220ms ease, background 220ms ease",
@@ -581,10 +583,8 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 transform: "translateZ(0px)",
                                 backfaceVisibility: "hidden",
                                 display: "flex",
-                                flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: dotGap,
                                 fontFamily,
                                 fontSize,
                                 fontWeight,
@@ -600,13 +600,17 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 textShadow: palette.activeTextShadow,
                             }}
                         >
-                            <span>{rightLabel}</span>
+                            {rightLabel}
                             <div
                                 style={{
+                                    position: "absolute",
+                                    left: "50%",
+                                    top: `calc(50% + ${fontSize / 2 + dotGap}px)`,
                                     width: dotSize,
                                     height: dotSize,
                                     borderRadius: "50%",
                                     background: haloColor,
+                                    transform: "translateX(-50%)",
                                     opacity: selection === "right" ? 1 : 0,
                                     transition:
                                         "opacity 220ms ease, background 220ms ease",
@@ -644,6 +648,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         style={hitAreaStyle}
                     />
                 </div>
+            </div>
             </div>
         </div>
     )
