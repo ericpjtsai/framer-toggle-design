@@ -56,8 +56,8 @@ interface Props {
 }
 
 /**
- * @framerSupportedLayoutWidth any-prefer-fixed
- * @framerSupportedLayoutHeight fixed
+ * @framerSupportedLayoutWidth any
+ * @framerSupportedLayoutHeight any
  * @framerIntrinsicWidth 372
  * @framerIntrinsicHeight 118
  */
@@ -103,6 +103,12 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const softRadius = Math.max(cornerRadius, 24)
     const cavityRadius = softRadius - shellPadding / 2
     const pillRadius = Math.max(cavityRadius - 8, 24)
+
+    // Auto-size the toggle based on fontSize, so changing the Size control
+    // in Framer makes the whole switch grow or shrink proportionally.
+    // Ratio tuned so fontSize 18 still produces the original 372 x 118.
+    const autoWidth = Math.round(fontSize * 20.5)
+    const autoHeight = Math.round(fontSize * 6.55)
 
     // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
     const accented = isDark && selection === "right"
@@ -339,8 +345,8 @@ export default function ClientWorkAiLabToggle(props: Props) {
             onPointerLeave={resetLight}
             style={{
                 ...style,
-                width: style?.width ?? 372,
-                height: style?.height ?? 118,
+                width: autoWidth,
+                height: autoHeight,
                 position: "relative",
                 overflow: "visible",
                 transform: isHovering && interactiveLight ? "translateY(-1px)" : "translateY(0px)",
