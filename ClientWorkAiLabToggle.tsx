@@ -50,6 +50,7 @@ interface Props {
     shellTint: string
     haloColor: string
     leftAccentColor: string
+    leftDotColor: string
     dotSize: number
     dotGap: number
     mobileShrink: number
@@ -87,6 +88,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
         shellTint,
         haloColor,
         leftAccentColor,
+        leftDotColor,
         dotSize,
         dotGap,
         mobileShrink,
@@ -178,10 +180,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
                   )
               `,
               pillShadow: `
-                  0 ${10 + depth * 6}px ${24 + depth * 10}px ${toRgba(shadowColor, 0.48)},
-                  0 ${4 + depth * 2}px ${8 + depth * 4}px ${toRgba(shadowColor, 0.34)},
-                  0 2px 4px ${toRgba(shadowColor, 0.24)},
-                  0 1px 1px ${toRgba(shadowColor, 0.18)},
+                  0 ${10 + depth * 6}px ${24 + depth * 10}px ${toRgba(shadowColor, 0.28)},
+                  0 ${4 + depth * 2}px ${8 + depth * 4}px ${toRgba(shadowColor, 0.20)},
+                  0 2px 4px ${toRgba(shadowColor, 0.14)},
+                  0 1px 1px ${toRgba(shadowColor, 0.10)},
                   inset 0 2px 1px rgba(255,255,255,1),
                   inset 0 1px 3px rgba(255,255,255,0.7),
                   inset 0 -2px 1px rgba(71,60,7,0.18),
@@ -543,7 +545,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                     width: dotSize,
                                     height: dotSize,
                                     borderRadius: "50%",
-                                    background: leftAccentColor,
+                                    background: leftDotColor,
                                     transform: "translateX(-50%)",
                                     opacity: selection === "left" ? 1 : 0,
                                     transition:
@@ -684,6 +686,7 @@ ClientWorkAiLabToggle.defaultProps = {
     shellTint: "rgb(39, 39, 37)",
     haloColor: "rgb(10, 132, 255)",
     leftAccentColor: "rgb(253, 87, 0)",
+    leftDotColor: "rgb(253, 87, 0)",
     dotSize: 5,
     dotGap: 4,
     mobileShrink: 100,
@@ -784,6 +787,10 @@ addPropertyControls(ClientWorkAiLabToggle, {
     leftAccentColor: {
         type: ControlType.Color,
         title: "Left Lit",
+    },
+    leftDotColor: {
+        type: ControlType.Color,
+        title: "Left Dot",
     },
     dotSize: {
         type: ControlType.Number,
