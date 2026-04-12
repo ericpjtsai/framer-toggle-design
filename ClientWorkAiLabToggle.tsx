@@ -50,6 +50,8 @@ interface Props {
     shellTint: string
     haloColor: string
     leftAccentColor: string
+    dotSize: number
+    dotGap: number
     padding: number
     depth: number
     lightIntensity: number
@@ -82,6 +84,8 @@ export default function ClientWorkAiLabToggle(props: Props) {
         shellTint,
         haloColor,
         leftAccentColor,
+        dotSize,
+        dotGap,
         padding,
         depth,
         lightIntensity,
@@ -358,8 +362,6 @@ export default function ClientWorkAiLabToggle(props: Props) {
                 height: autoHeight,
                 position: "relative",
                 overflow: "visible",
-                transform: isHovering && interactiveLight ? "translateY(-1px)" : "translateY(0px)",
-                transition: "transform 320ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
         >
                 <style>{`
@@ -511,15 +513,9 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 style={{
                                     position: "absolute",
                                     left: "50%",
-                                    bottom: Math.max(fontSize * 0.35, 4),
-                                    width: Math.max(
-                                        Math.round(fontSize * 0.28),
-                                        4
-                                    ),
-                                    height: Math.max(
-                                        Math.round(fontSize * 0.28),
-                                        4
-                                    ),
+                                    top: `calc(50% + ${fontSize / 2 + dotGap}px)`,
+                                    width: dotSize,
+                                    height: dotSize,
                                     borderRadius: "50%",
                                     background: leftAccentColor,
                                     transform: "translateX(-50%)",
@@ -595,15 +591,9 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 style={{
                                     position: "absolute",
                                     left: "50%",
-                                    bottom: Math.max(fontSize * 0.35, 4),
-                                    width: Math.max(
-                                        Math.round(fontSize * 0.28),
-                                        4
-                                    ),
-                                    height: Math.max(
-                                        Math.round(fontSize * 0.28),
-                                        4
-                                    ),
+                                    top: `calc(50% + ${fontSize / 2 + dotGap}px)`,
+                                    width: dotSize,
+                                    height: dotSize,
                                     borderRadius: "50%",
                                     background: haloColor,
                                     transform: "translateX(-50%)",
@@ -667,6 +657,8 @@ ClientWorkAiLabToggle.defaultProps = {
     shellTint: "rgb(39, 39, 37)",
     haloColor: "rgb(10, 132, 255)",
     leftAccentColor: "rgb(253, 87, 0)",
+    dotSize: 5,
+    dotGap: 4,
     padding: 6,
     depth: 0.68,
     lightIntensity: 0.42,
@@ -762,6 +754,24 @@ addPropertyControls(ClientWorkAiLabToggle, {
     leftAccentColor: {
         type: ControlType.Color,
         title: "Left Lit",
+    },
+    dotSize: {
+        type: ControlType.Number,
+        title: "Dot Size",
+        min: 0,
+        max: 16,
+        step: 1,
+        unit: "px",
+        displayStepper: true,
+    },
+    dotGap: {
+        type: ControlType.Number,
+        title: "Dot Gap",
+        min: 0,
+        max: 20,
+        step: 1,
+        unit: "px",
+        displayStepper: true,
     },
     padding: {
         type: ControlType.Number,
