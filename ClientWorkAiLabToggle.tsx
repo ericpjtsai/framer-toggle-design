@@ -507,6 +507,28 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             }}
                         >
                             {leftLabel}
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    left: "50%",
+                                    bottom: Math.max(fontSize * 0.35, 4),
+                                    width: Math.max(
+                                        Math.round(fontSize * 0.28),
+                                        4
+                                    ),
+                                    height: Math.max(
+                                        Math.round(fontSize * 0.28),
+                                        4
+                                    ),
+                                    borderRadius: "50%",
+                                    background: leftAccentColor,
+                                    transform: "translateX(-50%)",
+                                    opacity: selection === "left" ? 1 : 0,
+                                    transition:
+                                        "opacity 220ms ease, background 220ms ease",
+                                    pointerEvents: "none",
+                                }}
+                            />
                         </div>
                     </div>
 
@@ -569,6 +591,28 @@ export default function ClientWorkAiLabToggle(props: Props) {
                             }}
                         >
                             {rightLabel}
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    left: "50%",
+                                    bottom: Math.max(fontSize * 0.35, 4),
+                                    width: Math.max(
+                                        Math.round(fontSize * 0.28),
+                                        4
+                                    ),
+                                    height: Math.max(
+                                        Math.round(fontSize * 0.28),
+                                        4
+                                    ),
+                                    borderRadius: "50%",
+                                    background: haloColor,
+                                    transform: "translateX(-50%)",
+                                    opacity: selection === "right" ? 1 : 0,
+                                    transition:
+                                        "opacity 220ms ease, background 220ms ease",
+                                    pointerEvents: "none",
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -681,13 +725,7 @@ addPropertyControls(ClientWorkAiLabToggle, {
     fontFamily: {
         type: ControlType.Font,
         title: "Font",
-        controls: "extended",
-        defaultFontType: "sans-serif",
-        defaultValue: {
-            fontFamily: "Tiempos, ui-serif, Georgia, serif",
-            fontWeight: 500,
-        },
-    } as any,
+    },
     fontWeight: {
         type: ControlType.Number,
         title: "Weight",
