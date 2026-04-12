@@ -105,10 +105,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const pillRadius = Math.max(cavityRadius - 8, 24)
 
     // Auto-size the toggle based on fontSize, so changing the Size control
-    // in Framer makes the whole switch grow or shrink proportionally.
-    // Ratio tuned so fontSize 18 still produces the original 372 x 118.
-    const autoWidth = Math.round(fontSize * 20.5)
-    const autoHeight = Math.round(fontSize * 6.55)
+    // in Framer makes the whole switch grow or shrink proportionally. Ratios
+    // tuned so the labels sit snug against the pill edges without a lot of
+    // wasted margin on either side.
+    const autoWidth = Math.round(fontSize * 17)
+    const autoHeight = Math.round(fontSize * 5.6)
 
     // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
     const accented = isDark && selection === "right"
@@ -459,14 +460,14 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 position: "absolute",
                                 top: 0,
                                 bottom: 0,
-                                left: -5,
+                                left: -2,
                                 right: 0,
                                 borderRadius: `${pillRadius}px 0 0 ${pillRadius}px`,
                                 background:
                                     "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
                                 boxShadow:
-                                    "inset 0 -2px 3px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,120,0.14)",
-                                transform: "translateZ(-14px)",
+                                    "inset 0 -1px 2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,220,120,0.12)",
+                                transform: "translateZ(-8px)",
                             }}
                         />
                         <div
@@ -519,13 +520,13 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 top: 0,
                                 bottom: 0,
                                 left: 0,
-                                right: -5,
+                                right: -2,
                                 borderRadius: `0 ${pillRadius}px ${pillRadius}px 0`,
                                 background:
                                     "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
                                 boxShadow:
-                                    "inset 0 -2px 3px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,120,0.14)",
-                                transform: "translateZ(-14px)",
+                                    "inset 0 -1px 2px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,220,120,0.12)",
+                                transform: "translateZ(-8px)",
                             }}
                         />
                         <div
@@ -604,7 +605,7 @@ ClientWorkAiLabToggle.defaultProps = {
     activeTextColor: "rgb(71, 60, 7)",
     inactiveTextColor: "rgba(71, 60, 7, 0.35)",
     shellTint: "rgb(39, 39, 37)",
-    haloColor: "rgb(255, 210, 0)",
+    haloColor: "rgb(10, 132, 255)",
     padding: 10,
     depth: 0.68,
     lightIntensity: 0.42,
