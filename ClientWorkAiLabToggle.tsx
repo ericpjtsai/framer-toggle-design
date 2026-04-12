@@ -44,6 +44,7 @@ interface Props {
     fontSize: number
     fontFamily: string
     fontWeight: number
+    letterSpacing: number
     activeTextColor: string
     inactiveTextColor: string
     shellTint: string
@@ -74,6 +75,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
         fontSize,
         fontFamily,
         fontWeight,
+        letterSpacing,
         activeTextColor,
         inactiveTextColor,
         shellTint,
@@ -117,13 +119,17 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const palette = isDark
         ? {
               // Portfolio palette: charcoal #272725 shell, cream #f5f0e8 plank,
-              // olive #473c07 text, yellow #ffd200 halo.
+              // olive #473c07 text. Shell color comes from the shellTint prop
+              // so users can recolor the outer frame from the Framer panel;
+              // a subtle white-to-black overlay preserves the soft highlight
+              // at the top and darken at the bottom regardless of base color.
               shellBackground: `
                   linear-gradient(180deg,
-                      rgba(46,46,44,1) 0%,
-                      rgba(39,39,37,1) 55%,
-                      rgba(31,31,29,1) 100%
-                  )
+                      rgba(255,255,255,0.08) 0%,
+                      rgba(255,255,255,0) 45%,
+                      rgba(0,0,0,0.28) 100%
+                  ),
+                  ${shellTint}
               `,
               shellShadow: `
                   0 ${8 + depth * 6}px ${20 + depth * 8}px rgba(0,0,0,0.38),
@@ -486,7 +492,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 fontFamily,
                                 fontSize,
                                 fontWeight,
-                                letterSpacing: "-0.04em",
+                                letterSpacing: `${letterSpacing}em`,
                                 lineHeight: 1,
                                 whiteSpace: "nowrap",
                                 transition:
@@ -545,7 +551,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 fontFamily,
                                 fontSize,
                                 fontWeight,
-                                letterSpacing: "-0.04em",
+                                letterSpacing: `${letterSpacing}em`,
                                 lineHeight: 1,
                                 whiteSpace: "nowrap",
                                 transition:
@@ -603,6 +609,7 @@ ClientWorkAiLabToggle.defaultProps = {
     fontSize: 18,
     fontFamily: "Tiempos, ui-serif, Georgia, serif",
     fontWeight: 500,
+    letterSpacing: -0.04,
     activeTextColor: "rgb(71, 60, 7)",
     inactiveTextColor: "rgba(71, 60, 7, 0.35)",
     shellTint: "rgb(39, 39, 37)",
@@ -678,6 +685,15 @@ addPropertyControls(ClientWorkAiLabToggle, {
         min: 100,
         max: 900,
         step: 100,
+        displayStepper: true,
+    },
+    letterSpacing: {
+        type: ControlType.Number,
+        title: "Tracking",
+        min: -0.15,
+        max: 0.25,
+        step: 0.01,
+        unit: "em",
         displayStepper: true,
     },
     activeTextColor: {
