@@ -655,9 +655,15 @@ addPropertyControls(ClientWorkAiLabToggle, {
         displayStepper: true,
     },
     fontFamily: {
-        type: ControlType.String,
+        type: ControlType.Font,
         title: "Font",
-    },
+        controls: "extended",
+        defaultFontType: "sans-serif",
+        defaultValue: {
+            fontFamily: "Tiempos, ui-serif, Georgia, serif",
+            fontWeight: 500,
+        },
+    } as any,
     fontWeight: {
         type: ControlType.Number,
         title: "Weight",
