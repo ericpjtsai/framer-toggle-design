@@ -455,16 +455,16 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         <div
                             style={{
                                 position: "absolute",
-                                top: -5,
-                                bottom: -5,
+                                top: 0,
+                                bottom: 0,
                                 left: -5,
                                 right: 0,
-                                borderRadius: `${pillRadius + 5}px 0 0 ${pillRadius + 5}px`,
+                                borderRadius: `${pillRadius}px 0 0 ${pillRadius}px`,
                                 background:
                                     "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
                                 boxShadow:
-                                    "0 10px 18px rgba(0,0,0,0.55), 0 4px 6px rgba(0,0,0,0.4), inset 0 -2px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,120,0.15)",
-                                transform: "translateZ(-16px)",
+                                    "inset 0 -2px 3px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,120,0.14)",
+                                transform: "translateZ(-14px)",
                             }}
                         />
                         <div
@@ -514,16 +514,16 @@ export default function ClientWorkAiLabToggle(props: Props) {
                         <div
                             style={{
                                 position: "absolute",
-                                top: -5,
-                                bottom: -5,
+                                top: 0,
+                                bottom: 0,
                                 left: 0,
                                 right: -5,
-                                borderRadius: `0 ${pillRadius + 5}px ${pillRadius + 5}px 0`,
+                                borderRadius: `0 ${pillRadius}px ${pillRadius}px 0`,
                                 background:
                                     "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
                                 boxShadow:
-                                    "0 10px 18px rgba(0,0,0,0.55), 0 4px 6px rgba(0,0,0,0.4), inset 0 -2px 3px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,120,0.15)",
-                                transform: "translateZ(-16px)",
+                                    "inset 0 -2px 3px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,220,120,0.14)",
+                                transform: "translateZ(-14px)",
                             }}
                         />
                         <div
