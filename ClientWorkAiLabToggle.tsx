@@ -310,18 +310,12 @@ export default function ClientWorkAiLabToggle(props: Props) {
         [leftLink, navigateTo, rightLink]
     )
 
-    // V-hinged flip switch in 3D: two halves pivot around the shared center
-    // line. The selected half stays flat at the cavity floor; the other half
-    // hinges FORWARD (out of the screen) via rotateY, so the raised edge
-    // pops toward the viewer like a real rocker cap.
-    const tiltAngle = 26
-    const leftHalfTransform =
+    // Asymmetric flip switch: OFF = 0°, ON = 30° tilt with the AI Lab side
+    // rotating forward toward the viewer. Single rigid plank, two states.
+    const tiltAngle = 30
+    const seesawTransform =
         selection === "right"
             ? `rotateY(${tiltAngle}deg)`
-            : "rotateY(0deg)"
-    const rightHalfTransform =
-        selection === "left"
-            ? `rotateY(${-tiltAngle}deg)`
             : "rotateY(0deg)"
 
     const hitAreaStyle: React.CSSProperties = {
@@ -439,78 +433,77 @@ export default function ClientWorkAiLabToggle(props: Props) {
                     <div
                         style={{
                             position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            width: "50%",
-                            borderRadius: `${pillRadius}px 0 0 ${pillRadius}px`,
+                            inset: 0,
+                            borderRadius: pillRadius,
                             background: palette.pillBackground,
                             boxShadow: palette.pillShadow,
-                            transformOrigin: "100% 50%",
-                            transform: leftHalfTransform,
+                            transformOrigin: "50% 50%",
+                            transform: seesawTransform,
+                            transformStyle: "preserve-3d",
                             backfaceVisibility: "hidden",
                             transition:
-                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily,
-                            fontSize,
-                            fontWeight,
-                            letterSpacing: "-0.04em",
-                            lineHeight: 1,
-                            whiteSpace: "nowrap",
-                            color:
-                                selection === "left"
-                                    ? palette.activeTextColor
-                                    : palette.inactiveTextColor,
-                            textShadow:
-                                selection === "left"
-                                    ? palette.activeTextShadow
-                                    : palette.inactiveTextShadow,
+                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease",
                         }}
                     >
-                        {leftLabel}
-                    </div>
-
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: 0,
-                            bottom: 0,
-                            right: 0,
-                            width: "50%",
-                            borderRadius: `0 ${pillRadius}px ${pillRadius}px 0`,
-                            background: palette.pillBackground,
-                            boxShadow: palette.pillShadow,
-                            transformOrigin: "0% 50%",
-                            transform: rightHalfTransform,
-                            backfaceVisibility: "hidden",
-                            transition:
-                                "transform 520ms cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 220ms ease, background 220ms ease, color 220ms ease",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily,
-                            fontSize,
-                            fontWeight,
-                            letterSpacing: "-0.04em",
-                            lineHeight: 1,
-                            whiteSpace: "nowrap",
-                            color:
-                                selection === "right"
-                                    ? palette.activeTextColor
-                                    : palette.inactiveTextColor,
-                            textShadow:
-                                selection === "right"
-                                    ? palette.activeTextShadow
-                                    : palette.inactiveTextShadow,
-                            animation: accented
-                                ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
-                                : undefined,
-                        }}
-                    >
-                        {rightLabel}
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                display: "flex",
+                                alignItems: "center",
+                                pointerEvents: "none",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    fontFamily,
+                                    fontSize,
+                                    fontWeight,
+                                    letterSpacing: "-0.04em",
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap",
+                                    color:
+                                        selection === "left"
+                                            ? palette.activeTextColor
+                                            : palette.inactiveTextColor,
+                                    textShadow:
+                                        selection === "left"
+                                            ? palette.activeTextShadow
+                                            : palette.inactiveTextShadow,
+                                    transition: "color 220ms ease",
+                                }}
+                            >
+                                {leftLabel}
+                            </div>
+                            <div
+                                style={{
+                                    flex: 1,
+                                    textAlign: "center",
+                                    fontFamily,
+                                    fontSize,
+                                    fontWeight,
+                                    letterSpacing: "-0.04em",
+                                    lineHeight: 1,
+                                    whiteSpace: "nowrap",
+                                    color:
+                                        selection === "right"
+                                            ? palette.activeTextColor
+                                            : palette.inactiveTextColor,
+                                    textShadow:
+                                        selection === "right"
+                                            ? palette.activeTextShadow
+                                            : palette.inactiveTextShadow,
+                                    transition: "color 220ms ease",
+                                    animation: accented
+                                        ? "cwAiToggleBreathe 3.4s ease-in-out infinite"
+                                        : undefined,
+                                }}
+                            >
+                                {rightLabel}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
