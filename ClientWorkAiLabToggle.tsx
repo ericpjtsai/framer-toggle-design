@@ -458,7 +458,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 top: -5,
                                 bottom: -5,
                                 left: -5,
-                                right: -5,
+                                right: 0,
                                 borderRadius: `${pillRadius + 5}px 0 0 ${pillRadius + 5}px`,
                                 background:
                                     "linear-gradient(180deg, rgba(86,70,18,1) 0%, rgba(52,43,10,1) 45%, rgba(24,20,4,1) 100%)",
@@ -516,7 +516,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 position: "absolute",
                                 top: -5,
                                 bottom: -5,
-                                left: -5,
+                                left: 0,
                                 right: -5,
                                 borderRadius: `0 ${pillRadius + 5}px ${pillRadius + 5}px 0`,
                                 background:
