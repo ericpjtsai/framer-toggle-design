@@ -52,6 +52,9 @@ interface Props {
     leftAccentColor: string
     dotSize: number
     dotGap: number
+    mobileShrink: number
+    shellWidth: number
+    shadowColor: string
     padding: number
     depth: number
     lightIntensity: number
@@ -86,6 +89,9 @@ export default function ClientWorkAiLabToggle(props: Props) {
         leftAccentColor,
         dotSize,
         dotGap,
+        mobileShrink,
+        shellWidth,
+        shadowColor,
         padding,
         depth,
         lightIntensity,
@@ -104,7 +110,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
     }, [defaultSelection])
 
     const glowStrength = 0.48 + lightIntensity * 0.95
-    const shellPadding = padding
+    const shellPadding = shellWidth
     const pillInsetX = padding
     const pillInsetTop = padding
     const pillInsetBottom = padding
@@ -112,12 +118,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const cavityRadius = softRadius - shellPadding / 2
     const pillRadius = Math.max(cavityRadius - 8, 24)
 
-    // Auto-size the toggle based on fontSize, so changing the Size control
-    // in Framer makes the whole switch grow or shrink proportionally. Ratios
-    // tuned so the labels sit snug against the pill edges with a tighter
-    // vertical margin — more button, less wasted whitespace around the text.
+    const scale = mobileShrink / 100
     const autoWidth = Math.round(fontSize * 15)
     const autoHeight = Math.round(fontSize * 3.5)
+    const displayWidth = Math.round(autoWidth * scale)
+    const displayHeight = Math.round(autoHeight * scale)
 
     // Dark theme has two visual states: matte (Client Work) and powered (AI Lab).
     const accented = isDark && selection === "right"
@@ -173,10 +178,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
                   )
               `,
               pillShadow: `
-                  0 ${10 + depth * 6}px ${24 + depth * 10}px rgba(0,0,0,0.48),
-                  0 ${4 + depth * 2}px ${8 + depth * 4}px rgba(0,0,0,0.34),
-                  0 2px 4px rgba(0,0,0,0.24),
-                  0 1px 1px rgba(0,0,0,0.18),
+                  0 ${10 + depth * 6}px ${24 + depth * 10}px ${toRgba(shadowColor, 0.48)},
+                  0 ${4 + depth * 2}px ${8 + depth * 4}px ${toRgba(shadowColor, 0.34)},
+                  0 2px 4px ${toRgba(shadowColor, 0.24)},
+                  0 1px 1px ${toRgba(shadowColor, 0.18)},
                   inset 0 2px 1px rgba(255,255,255,1),
                   inset 0 1px 3px rgba(255,255,255,0.7),
                   inset 0 -2px 1px rgba(71,60,7,0.18),
@@ -358,12 +363,21 @@ export default function ClientWorkAiLabToggle(props: Props) {
             onPointerLeave={resetLight}
             style={{
                 ...style,
-                width: autoWidth,
-                height: autoHeight,
+                width: displayWidth,
+                height: displayHeight,
                 position: "relative",
                 overflow: "visible",
             }}
         >
+            <div
+                style={{
+                    width: autoWidth,
+                    height: autoHeight,
+                    position: "relative",
+                    transform: scale < 1 ? `scale(${scale})` : undefined,
+                    transformOrigin: "0 0",
+                }}
+            >
                 <style>{`
                     @keyframes cwAiToggleBreathe {
                         0%, 100% { opacity: 0.55; }
@@ -635,6 +649,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
                     />
                 </div>
             </div>
+            </div>
         </div>
     )
 }
@@ -659,6 +674,9 @@ ClientWorkAiLabToggle.defaultProps = {
     leftAccentColor: "rgb(253, 87, 0)",
     dotSize: 5,
     dotGap: 4,
+    mobileShrink: 100,
+    shellWidth: 6,
+    shadowColor: "rgb(0, 0, 0)",
     padding: 6,
     depth: 0.68,
     lightIntensity: 0.42,
@@ -772,6 +790,28 @@ addPropertyControls(ClientWorkAiLabToggle, {
         step: 1,
         unit: "px",
         displayStepper: true,
+    },
+    mobileShrink: {
+        type: ControlType.Number,
+        title: "Mobile %",
+        min: 40,
+        max: 100,
+        step: 5,
+        unit: "%",
+        displayStepper: true,
+    },
+    shellWidth: {
+        type: ControlType.Number,
+        title: "Shell W",
+        min: 0,
+        max: 30,
+        step: 1,
+        unit: "px",
+        displayStepper: true,
+    },
+    shadowColor: {
+        type: ControlType.Color,
+        title: "Shadow",
     },
     padding: {
         type: ControlType.Number,
