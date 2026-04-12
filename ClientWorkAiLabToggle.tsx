@@ -49,6 +49,7 @@ interface Props {
     inactiveTextColor: string
     shellTint: string
     haloColor: string
+    leftAccentColor: string
     padding: number
     depth: number
     lightIntensity: number
@@ -80,6 +81,7 @@ export default function ClientWorkAiLabToggle(props: Props) {
         inactiveTextColor,
         shellTint,
         haloColor,
+        leftAccentColor,
         padding,
         depth,
         lightIntensity,
@@ -496,8 +498,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 lineHeight: 1,
                                 whiteSpace: "nowrap",
                                 transition:
-                                    "box-shadow 220ms ease, background 220ms ease",
-                                color: palette.activeTextColor,
+                                    "box-shadow 220ms ease, background 220ms ease, color 220ms ease",
+                                color:
+                                    selection === "left"
+                                        ? leftAccentColor
+                                        : palette.activeTextColor,
                                 textShadow: palette.activeTextShadow,
                             }}
                         >
@@ -555,8 +560,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
                                 lineHeight: 1,
                                 whiteSpace: "nowrap",
                                 transition:
-                                    "box-shadow 220ms ease, background 220ms ease",
-                                color: palette.activeTextColor,
+                                    "box-shadow 220ms ease, background 220ms ease, color 220ms ease",
+                                color:
+                                    selection === "right"
+                                        ? haloColor
+                                        : palette.activeTextColor,
                                 textShadow: palette.activeTextShadow,
                             }}
                         >
@@ -614,6 +622,7 @@ ClientWorkAiLabToggle.defaultProps = {
     inactiveTextColor: "rgba(71, 60, 7, 0.35)",
     shellTint: "rgb(39, 39, 37)",
     haloColor: "rgb(10, 132, 255)",
+    leftAccentColor: "rgb(253, 87, 0)",
     padding: 6,
     depth: 0.68,
     lightIntensity: 0.42,
@@ -710,7 +719,11 @@ addPropertyControls(ClientWorkAiLabToggle, {
     },
     haloColor: {
         type: ControlType.Color,
-        title: "Halo",
+        title: "Right Lit / Halo",
+    },
+    leftAccentColor: {
+        type: ControlType.Color,
+        title: "Left Lit",
     },
     padding: {
         type: ControlType.Number,
