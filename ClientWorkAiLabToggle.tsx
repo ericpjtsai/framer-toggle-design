@@ -109,6 +109,10 @@ export default function ClientWorkAiLabToggle(props: Props) {
 
     React.useEffect(() => {
         setSelection(defaultSelection)
+        if (typeof window !== "undefined") {
+            ;(window as any).__toggleSelection = defaultSelection
+            window.dispatchEvent(new CustomEvent("toggle-selection-change"))
+        }
     }, [defaultSelection])
 
     const glowStrength = 0.48 + lightIntensity * 0.95
@@ -322,6 +326,11 @@ export default function ClientWorkAiLabToggle(props: Props) {
     const handleSelect = React.useCallback(
         (next: Selection) => {
             setSelection(next)
+
+            if (typeof window !== "undefined") {
+                ;(window as any).__toggleSelection = next
+                window.dispatchEvent(new CustomEvent("toggle-selection-change"))
+            }
 
             if (next === "left") {
                 navigateTo(leftLink)
