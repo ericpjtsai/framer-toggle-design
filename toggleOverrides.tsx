@@ -19,9 +19,10 @@ function useToggleSelection(): "left" | "right" {
     return sel
 }
 
-function useSectionVisibility(side: "left" | "right") {
-    const selection = useToggleSelection()
-    const active = selection === side
+const transition = { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }
+
+function useClientWorkVisibility() {
+    const active = useToggleSelection() === "left"
     const [render, setRender] = useState(active)
     const [show, setShow] = useState(active)
     const isMount = useRef(true)
@@ -32,12 +33,8 @@ function useSectionVisibility(side: "left" | "right") {
             return
         }
         if (active) {
-            const t = setTimeout(() => {
-                setRender(true)
-                requestAnimationFrame(() =>
-                    requestAnimationFrame(() => setShow(true))
-                )
-            }, 300)
+            setRender(true)
+            const t = setTimeout(() => setShow(true), 280)
             return () => clearTimeout(t)
         } else {
             setShow(false)
@@ -50,13 +47,20 @@ function useSectionVisibility(side: "left" | "right") {
 }
 
 export function ShowWhenClientWork(): Override {
-    const { active, render, show } = useSectionVisibility("left")
-    if (!render) return { style: { display: "none" } }
+    const { active, render, show } = useClientWorkVisibility()
     return {
+        layout: true,
         initial: false,
-        animate: { opacity: show ? 1 : 0, scale: show ? 1 : 0.97 },
-        transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
+        animate: {
+            opacity: show ? 1 : 0,
+            scale: show ? 1 : 0.97,
+            y: show ? 0 : -8,
+        },
+        transition: show
+            ? { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }
+            : transition,
         style: {
+            display: render ? undefined : "none",
             pointerEvents: active ? "auto" : "none",
             transformOrigin: "top center",
         },
@@ -64,15 +68,9 @@ export function ShowWhenClientWork(): Override {
 }
 
 export function ShowWhenAiLab(): Override {
-    const { active, render, show } = useSectionVisibility("right")
-    if (!render) return { style: { display: "none" } }
     return {
-        initial: false,
-        animate: { opacity: show ? 1 : 0, scale: show ? 1 : 0.97 },
-        transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
-        style: {
-            pointerEvents: active ? "auto" : "none",
-            transformOrigin: "top center",
-        },
+        layout: true,
+        transition,
+        style: { transformOrigin: "top center" },
     }
 }
